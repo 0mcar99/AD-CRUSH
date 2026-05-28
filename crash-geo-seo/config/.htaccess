@@ -1,0 +1,39 @@
+# =========================================================================
+# APACHE DIRECTIVE FOR SECURE STATIC AI SEO ROUTING
+# =========================================================================
+
+# Disable trailing slash redirection specifically for llms.txt and markdown mirrors
+# This solves Failure Point A where servers force redirect /llms.txt to /llms.txt/
+DirectorySlash Off
+
+# Enforce correct Content-Type (MIME-Type) encodings
+AddType text/plain;charset=utf-8 .txt
+AddType text/markdown;charset=utf-8 .md
+
+# Set custom headers when files are served
+<Files "llms.txt">
+    Header set Content-Type "text/plain; charset=utf-8"
+    Header set Cache-Control "public, max-age=86400, must-revalidate"
+    Header set X-Robots-Tag "index, follow, noarchive"
+</Files>
+
+<FilesMatch "\.md$">
+    Header set Content-Type "text/markdown; charset=utf-8"
+    Header set Cache-Control "public, max-age=86400, must-revalidate"
+    Header set X-Robots-Tag "index, follow, noarchive"
+</FilesMatch>
+
+# mod_rewrite rules: Bypass dynamic routing for direct static GEO requests
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # If the request matches the physical llms.txt, stop rewriting and serve it
+    RewriteCond %{REQUEST_URI} ^/llms.txt$
+    RewriteRule ^ - [L]
+
+    # If the request matches a markdown mirror, stop rewriting and serve it
+    RewriteCond %{REQUEST_URI} ^/mirrors/ [OR]
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+</IfModule>

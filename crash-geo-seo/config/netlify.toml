@@ -1,0 +1,38 @@
+# ==========================================
+# NETLIFY AI-SEO STATIC PRIORITY DEFINITIONS
+# ==========================================
+
+# Enforce strict headers for the LLM Executive Summary
+[[headers]]
+  for = "/llms.txt"
+  [headers.values]
+    Content-Type = "text/plain; charset=utf-8"
+    Cache-Control = "public, max-age=86400, must-revalidate"
+    X-Robots-Tag = "index, follow, noarchive"
+
+# Enforce strict headers for compiled Markdown mirrors
+[[headers]]
+  for = "/mirrors/*"
+  [headers.values]
+    Content-Type = "text/markdown; charset=utf-8"
+    Cache-Control = "public, max-age=86400, must-revalidate"
+    X-Robots-Tag = "index, follow, noarchive"
+
+# Safe redirects: Force prioritization of static assets before catch-all routes
+[[redirects]]
+  from = "/llms.txt"
+  to = "/llms.txt"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/mirrors/*"
+  to = "/mirrors/:splat"
+  status = 200
+  force = true
+
+# Standard SPA single-page application fallback (runs ONLY after static files are matched)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

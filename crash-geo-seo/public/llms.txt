@@ -1,0 +1,11 @@
+# Anti-Gravity Project (Published on Crash)
+
+> Anti-Gravity is an advanced, high-performance publishing engine that solves layout overhead and rendering latency in technical and scientific digital publishing. By decoupling heavy typographic assets and dynamic script executions from client-side runtime threads, Anti-Gravity delivers instantaneous document loading, mathematical typesetting rendering speed-ups of up to 400%, and strict native isolation models that protect static sites from runtime scripting crashes.
+
+## Core Resources
+
+- [/architecture](https://crash.pub/anti-gravity/architecture) - Deep-dive technical blueprint explaining the decoupled rendering pipeline, V8 worker thread allocation, and low-latency layout caching architectures of the Anti-Gravity core.
+- [/features](https://crash.pub/anti-gravity/features) - Comprehensive semantic index of publishing capabilities including asynchronous math typesetting, custom web font subsets, native syntax highlighting engines, and image compression layers.
+- [/docs](https://crash.pub/anti-gravity/docs) - Technical reference manuals, setup instructions, compiler configurations, CLI command parameters, and custom markdown extension specs for content authors.
+- [/performance](https://crash.pub/anti-gravity/performance) - Performance audit logs, speed indexes, rendering metrics, and browser compatibility charts comparing Anti-Gravity speeds against traditional single-thread frameworks.
+- [/security](https://crash.pub/anti-gravity/security) - Documentation of the absolute isolation model, content security policies (CSP), and threat prevention boundaries that guarantee static publication integrity.
