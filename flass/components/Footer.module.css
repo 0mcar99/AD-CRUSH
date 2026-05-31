@@ -1,0 +1,206 @@
+.footer {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+  position: relative;
+}
+
+/* Newsletter section */
+.newsletter {
+  margin-bottom: 80px;
+  display: grid;
+  gap: 40px;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  background: rgba(26,26,26,0.4);
+  padding: 48px;
+}
+@media (min-width: 768px) {
+  .newsletter { grid-template-columns: 1fr 1fr; padding: 56px; }
+}
+
+.nlLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--accent-orange);
+  margin-bottom: 12px;
+}
+.nlTitle {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 700;
+  line-height: 1.05;
+}
+.nlDesc {
+  margin-top: 16px;
+  max-width: 400px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+.nlForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.nlInput {
+  width: 100%;
+  padding: 18px 24px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+.nlInput::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+.nlInput:focus {
+  border-color: var(--accent-orange);
+  box-shadow: 0 0 30px -10px var(--accent-orange);
+}
+.nlBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 32px;
+  border-radius: var(--radius-full);
+  background: var(--accent-orange);
+  color: var(--bg-primary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.nlBtn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 40px -5px var(--accent-orange);
+}
+.nlBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  gap: 48px;
+}
+@media (min-width: 768px) {
+  .grid { grid-template-columns: 2fr 1fr 1fr; }
+}
+
+.brand {
+  max-width: 360px;
+}
+.brandDesc {
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.colTitle {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.colLinks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.colLinks a {
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+.colLinks a:hover {
+  color: var(--text-primary);
+}
+.colLinks span {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* Bottom bar */
+.bottom {
+  margin-top: 64px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+@media (min-width: 768px) {
+  .bottom { flex-direction: row; align-items: center; }
+}
+.bottomText {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+}
+.socials {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 8px;
+}
+.socialLink {
+  color: var(--text-secondary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.02);
+}
+.socialLink:hover {
+  color: var(--accent-orange);
+  border-color: var(--accent-orange);
+  background: rgba(255, 107, 0, 0.05);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 4px 20px rgba(255, 107, 0, 0.15);
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 200;
+  padding: 14px 24px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  animation: fade-in-up 0.3s ease;
+}
+.toastSuccess {
+  background: var(--success);
+  color: #fff;
+}
+.toastError {
+  background: var(--error);
+  color: #fff;
+}

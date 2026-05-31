@@ -1,0 +1,126 @@
+.container {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  user-select: none;
+  background: #0f0f0f;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.imageContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.before {
+  z-index: 10;
+}
+
+.after {
+  z-index: 5;
+}
+
+.visualWrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: radial-gradient(circle at center, #181818 0%, #0c0c0c 100%);
+}
+
+.label {
+  position: absolute;
+  top: 24px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  z-index: 20;
+}
+
+.beforeLabel {
+  left: 24px;
+  background: rgba(220, 38, 38, 0.2);
+  border: 1px solid rgba(220, 38, 38, 0.4);
+  color: #ff8888;
+}
+
+.afterLabel {
+  right: 24px;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #a7f3d0;
+}
+
+.sliderBar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--gradient-crush);
+  z-index: 30;
+  cursor: ew-resize;
+  box-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
+}
+
+.sliderHandle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  border: 2px solid var(--accent-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  box-shadow: 0 0 20px rgba(255, 107, 0, 0.4), inset 0 0 8px rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.sliderBar:hover .sliderHandle,
+.sliderHandle:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  background: #252525;
+}
+
+.arrowIcon {
+  width: 18px;
+  height: 18px;
+  color: var(--accent-orange);
+}
+
+/* Pipe Visual Styling */
+.pipeGraphic {
+  width: 100%;
+  max-width: 600px;
+  height: 220px;
+}
+
+.glowEffect {
+  filter: drop-shadow(0 0 8px rgba(255, 107, 0, 0.2));
+}
+
+@media (max-width: 768px) {
+  .container {
+    height: 360px;
+  }
+  .pipeGraphic {
+    height: 160px;
+  }
+}

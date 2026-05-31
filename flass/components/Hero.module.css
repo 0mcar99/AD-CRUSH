@@ -1,0 +1,238 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.bgImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.45;
+  z-index: 0;
+}
+
+.bgOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(10,10,10,0.4), rgba(10,10,10,0.2) 50%, var(--bg-primary));
+  z-index: 1;
+}
+
+/* Floating wireframe shapes */
+.shapes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.shape {
+  position: absolute;
+  border: 1px solid;
+  animation: float-y 6s ease-in-out infinite;
+  transition: transform 0.3s ease-out;
+}
+.shape1 {
+  left: 8%;
+  top: 20%;
+  width: 128px;
+  height: 128px;
+  border-color: rgba(255,107,0,0.25);
+  transform: rotate(20deg);
+  animation-delay: 0s;
+}
+.shape2 {
+  right: 10%;
+  top: 28%;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border-color: rgba(59,130,246,0.25);
+  animation-delay: 1s;
+}
+.shape3 {
+  right: 20%;
+  bottom: 18%;
+  width: 96px;
+  height: 96px;
+  border-color: rgba(6,182,212,0.2);
+  transform: rotate(45deg);
+  animation-delay: 2s;
+}
+
+/* Content */
+.content {
+  position: relative;
+  z-index: 10;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background: rgba(26,26,26,0.4);
+  backdrop-filter: blur(8px);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fade-in-up 0.6s ease 0.2s forwards;
+}
+.badgeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-orange);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(64px, 18vw, 180px);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+}
+.titleAdd {
+  display: block;
+  color: var(--text-primary);
+  opacity: 0;
+  animation: fade-in-up 0.8s cubic-bezier(0.22,1,0.36,1) 0.1s forwards;
+}
+.titleCrush {
+  display: block;
+  background: var(--gradient-crush);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 20px 40px rgba(255,107,0,0.35));
+  opacity: 0;
+  animation: fade-in-up 0.8s cubic-bezier(0.22,1,0.36,1) 0.25s forwards;
+}
+
+/* Rotating taglines */
+.taglineWrap {
+  position: relative;
+  height: 3.5rem;
+  max-width: 700px;
+  margin: 40px auto 0;
+  overflow: hidden;
+}
+.tagline {
+  position: absolute;
+  inset: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 3vw, 30px);
+  font-style: italic;
+  color: rgba(255,255,255,0.9);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.taglineHidden {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.taglineVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.subtext {
+  max-width: 600px;
+  margin: 32px auto 0;
+  font-size: clamp(14px, 1.8vw, 16px);
+  color: var(--text-secondary);
+  opacity: 0;
+  animation: fade-in-up 0.8s ease 0.8s forwards;
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 48px;
+  opacity: 0;
+  animation: fade-in-up 0.6s ease 1.1s forwards;
+}
+.ctaPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 32px;
+  border-radius: var(--radius-full);
+  background: var(--accent-orange);
+  color: var(--bg-primary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.ctaPrimary:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 60px -10px var(--accent-orange);
+}
+.ctaPrimary span {
+  transition: transform 0.3s ease;
+}
+.ctaPrimary:hover span {
+  transform: translateX(4px);
+}
+.ctaSecondary {
+  display: inline-flex;
+  padding: 16px 32px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-primary);
+  transition: border-color 0.3s ease;
+  text-decoration: none;
+}
+.ctaSecondary:hover {
+  border-color: var(--accent-orange);
+}
+
+/* Scroll indicator */
+.scrollIndicator {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--text-muted);
+  opacity: 0;
+  animation: fade-in-up 0.6s ease 1.6s forwards;
+}
+.scrollArrow {
+  color: var(--accent-orange);
+  animation: bounce-arrow 1.6s ease-in-out infinite;
+}

@@ -1,0 +1,252 @@
+.card {
+  position: relative;
+  background: rgba(17, 17, 17, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 107, 0, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 107, 0, 0.03);
+}
+
+.popularCard {
+  border-color: var(--accent-orange);
+  box-shadow: 0 10px 30px rgba(255, 107, 0, 0.08);
+}
+
+.popularCard:hover {
+  border-color: var(--accent-orange-light);
+  box-shadow: 0 25px 50px rgba(255, 107, 0, 0.15);
+}
+
+.popularBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--gradient-crush);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  z-index: 10;
+}
+
+/* Image Container Frame */
+.imageFrame {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  width: 100%;
+  height: 230px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  overflow: hidden;
+}
+
+.productImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.card:hover .productImage {
+  transform: scale(1.03);
+}
+
+/* Details and Text Block */
+.detailsBlock {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #ffffff;
+}
+
+.subtitle {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+  height: 64px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Badges Row */
+.badgeRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.sizeBadge {
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.stockBadge {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Pricing Layout */
+.priceLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.priceBlock {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.price {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.mrp {
+  font-size: 15px;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+/* Save badge styled for dark theme */
+.saveBadge {
+  background: rgba(255, 107, 0, 0.08);
+  color: var(--accent-orange-light);
+  border: 1px solid rgba(255, 107, 0, 0.15);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 650;
+  padding: 3px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 24px;
+  align-self: flex-start;
+}
+
+/* Actions Selector and Button Row */
+.actionRow {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+  align-items: center;
+}
+
+/* Quantity Counter Selector styled for dark theme */
+.qtyContainer {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  height: 44px;
+  background: #18181b;
+  overflow: hidden;
+}
+
+.qtyBtn {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  width: 32px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.qtyBtn:hover {
+  background: #27272a;
+  color: #ffffff;
+}
+
+.qtyVal {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  min-width: 28px;
+  text-align: center;
+  user-select: none;
+}
+
+/* Add to Cart Orange Button */
+.btnBuy {
+  flex-grow: 1;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #FF6B00; 
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.2);
+}
+
+.btnBuy:hover {
+  background: #e05e00;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(255, 107, 0, 0.35);
+}
+
+.btnBuy:active {
+  transform: translateY(0);
+}
+
+.btnBuy * {
+  cursor: pointer;
+}

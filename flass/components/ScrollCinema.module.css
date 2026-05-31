@@ -1,0 +1,263 @@
+.cinema {
+  position: relative;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+/* Each scene layer */
+.scene {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.sceneImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+/* Gradient overlays on each scene */
+.sceneOverlayTone {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.sceneOverlayBottom {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--bg-primary), rgba(10,10,10,0.4) 50%, transparent);
+  pointer-events: none;
+}
+
+/* Scene content */
+.sceneContent {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 80px 24px;
+}
+.sceneContentInner {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 24px;
+  width: 100%;
+  will-change: transform, opacity;
+}
+.alignLeft { align-items: flex-start; text-align: left; }
+.alignRight { align-items: flex-end; text-align: right; }
+.alignCenter { align-items: center; text-align: center; }
+
+.sceneEyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--accent-orange);
+}
+
+.sceneTitle {
+  max-width: 800px;
+  font-family: var(--font-display);
+  font-size: clamp(36px, 7vw, 80px);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.sceneBody {
+  max-width: 480px;
+  font-size: clamp(14px, 1.6vw, 18px);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Social frame badges */
+.socialFrames {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+.socialBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background: rgba(10,10,10,0.7);
+  backdrop-filter: blur(8px);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-secondary);
+}
+.socialDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-orange);
+}
+
+/* ---- Globe Scene ---- */
+.globeWrap {
+  position: relative;
+  width: clamp(200px, 40vw, 400px);
+  height: clamp(200px, 40vw, 400px);
+}
+.globeFrame {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255,107,0,0.35);
+}
+.globeLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid rgba(255,107,0,0.12);
+}
+.globeMeridian {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 1px solid rgba(255,107,0,0.12);
+}
+.globeNode {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-orange);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 16px var(--accent-orange);
+}
+.globeHalo {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255,107,0,0.15), transparent 50%, rgba(59,130,246,0.1));
+  filter: blur(40px);
+  pointer-events: none;
+}
+.globeOrbit {
+  position: absolute;
+  inset: -12%;
+  border-radius: 50%;
+  border: 1px dashed var(--border);
+  animation: spin-slow 30s linear infinite;
+}
+
+/* Stats grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+  max-width: 800px;
+}
+@media (min-width: 768px) {
+  .statsGrid { grid-template-columns: repeat(4, 1fr); }
+}
+.statCard {
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: rgba(26,26,26,0.4);
+  text-align: left;
+}
+.statValue {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 700;
+}
+.statLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ---- Finale ---- */
+.finaleTitle {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 16vw, 160px);
+  font-weight: 900;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+}
+.finaleTagline {
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 3vw, 30px);
+  font-style: italic;
+  color: rgba(255,255,255,0.9);
+  max-width: 500px;
+}
+.finaleCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 40px;
+  border-radius: var(--radius-full);
+  background: var(--accent-orange);
+  color: var(--bg-primary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+.finaleCta:hover {
+  transform: scale(1.05);
+}
+.finaleCta span {
+  transition: transform 0.3s ease;
+}
+.finaleCta:hover span {
+  transform: translateX(8px);
+}
+
+/* Progress bar */
+.progressTrack {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  width: 2px;
+  height: 192px;
+  background: var(--border);
+  display: none;
+  pointer-events: none;
+}
+@media (min-width: 768px) {
+  .progressTrack { display: block; }
+}
+.progressFill {
+  width: 100%;
+  background: var(--accent-orange);
+  transform-origin: top;
+}

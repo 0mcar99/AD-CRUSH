@@ -1,0 +1,138 @@
+.cinemaSection {
+  position: relative;
+  width: 100%;
+  background-color: #050505;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.pinContainer {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+
+.visualCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  border-right: 1px solid var(--border);
+  background: radial-gradient(circle at center, #111111 0%, #050505 100%);
+}
+
+.canvasWrapper {
+  position: relative;
+  width: 80%;
+  height: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.svgGraphic {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.1s ease-out;
+}
+
+.timelinePanel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 3;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 10%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.slideActive {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.stepNumber {
+  font-family: var(--font-mono);
+  color: var(--accent-orange);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: clamp(28px, 4vw, 44px);
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+
+.description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 460px;
+}
+
+/* Mobile Fallback - Beautiful interactive list */
+.mobileFallback {
+  display: none;
+  padding: 60px 24px;
+}
+
+.mobileCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 30px 24px;
+  margin-bottom: 24px;
+}
+
+.mobileCard:last-child {
+  margin-bottom: 0;
+}
+
+.mobileVisual {
+  width: 100%;
+  height: 180px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #181818;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 107, 0, 0.1);
+}
+
+@media (max-width: 1024px) {
+  .pinContainer {
+    display: none;
+  }
+  .mobileFallback {
+    display: block;
+  }
+}

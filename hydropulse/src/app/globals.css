@@ -1,0 +1,285 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=Playfair+Display:ital,wght@1,400;1,600&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Colors */
+  --bg-primary: #0A0A0A;
+  --bg-secondary: #111111;
+  --accent-orange: #FF6B00;
+  --accent-orange-light: #FF8C00;
+  --text-primary: #FFFFFF;
+  --text-secondary: #E4E4E7;
+  --text-muted: #A1A1AA;
+  --border: #27272A;
+  --gradient-crush: linear-gradient(135deg, #FF6B00, #FF8C00);
+  --gradient-dark: linear-gradient(180deg, #111111 0%, #0A0A0A 100%);
+  --gradient-glow: radial-gradient(circle, rgba(255, 107, 0, 0.15) 0%, rgba(10, 10, 10, 0) 70%);
+
+  /* Fonts */
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-grotesk: 'Space Grotesk', sans-serif;
+
+  /* Transitions */
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-snappy: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Reset & Base Styles */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  cursor: default;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: #222;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-orange);
+}
+
+/* Typography Helpers */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+p {
+  font-family: var(--font-body);
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+a, button {
+  cursor: pointer;
+}
+
+/* Global Noise and Ambient Background Mesh */
+.appContainer {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--bg-primary);
+  overflow: hidden;
+}
+
+/* Noise overlay */
+.noiseOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.02;
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* Ambient Floating Orbs */
+.bgOrbs {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  filter: blur(140px);
+}
+
+.orb1 {
+  position: absolute;
+  top: 10%;
+  left: -10%;
+  width: 45vw;
+  height: 45vw;
+  background: radial-gradient(circle, rgba(255, 107, 0, 0.12) 0%, rgba(255, 140, 0, 0.02) 60%, transparent 100%);
+  animation: floatOrb 25s infinite alternate ease-in-out;
+}
+
+.orb2 {
+  position: absolute;
+  bottom: 10%;
+  right: -10%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(255, 140, 0, 0.1) 0%, rgba(255, 107, 0, 0.01) 60%, transparent 100%);
+  animation: floatOrb2 30s infinite alternate ease-in-out;
+  animation-delay: -5s;
+}
+
+.orb3 {
+  position: absolute;
+  top: 40%;
+  left: 30%;
+  width: 35vw;
+  height: 35vw;
+  background: radial-gradient(circle, rgba(255, 107, 0, 0.08) 0%, rgba(10, 10, 10, 0) 70%);
+  animation: floatOrb 28s infinite alternate ease-in-out;
+  animation-delay: -10s;
+}
+
+@keyframes floatOrb {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(5%, 10%) scale(1.1);
+  }
+  100% {
+    transform: translate(-5%, -5%) scale(0.95);
+  }
+}
+
+@keyframes floatOrb2 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-8%, -12%) scale(0.9);
+  }
+  100% {
+    transform: translate(6%, 5%) scale(1.05);
+  }
+}
+
+/* Premium Card & Glassmorphism classes */
+.glassCard {
+  background: rgba(17, 17, 17, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: var(--transition-smooth);
+}
+
+.glassCard:hover {
+  border-color: rgba(255, 107, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 
+              0 0 20px rgba(255, 107, 0, 0.03);
+}
+
+/* Interactive Text Links - Link Draw Effect */
+.linkDraw {
+  position: relative;
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition-snappy);
+}
+
+.linkDraw:hover {
+  color: var(--text-primary);
+}
+
+.linkDraw::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--gradient-crush);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.linkDraw:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Gradient text */
+.gradientText {
+  background: var(--gradient-crush);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Section spacing clamp */
+.sectionPadding {
+  padding: clamp(60px, 8vw, 120px) 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Buttons styling */
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--gradient-crush);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 28px;
+  font-size: 15px;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 107, 0, 0.5);
+}
+
+.btnPrimary * {
+  cursor: pointer;
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-weight: 600;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 28px;
+  font-size: 15px;
+  transition: var(--transition-smooth);
+}
+
+.btnSecondary:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--text-muted);
+  transform: translateY(-2px);
+}
+
+.btnSecondary * {
+  cursor: pointer;
+}
