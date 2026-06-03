@@ -261,3 +261,28 @@
   from { transform: translateX(100%); }
   to { transform: translateX(0); }
 }
+
+@media (max-width: 480px) {
+  .panel {
+    max-width: 100%;
+  }
+
+  .header {
+    padding: 16px 20px;
+  }
+
+  .tabs {
+    padding: 0 20px;
+  }
+
+  .content {
+    padding: 16px 20px;
+  }
+
+  .msgBot, .msgUser {
+    max-width: 90%;
+    font-size: 0.85rem;
+    padding: 10px 14px;
+  }
+}
+

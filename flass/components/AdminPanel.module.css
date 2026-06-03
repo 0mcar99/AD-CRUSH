@@ -504,3 +504,85 @@
   font-size: 0.85rem;
   padding: 40px 20px;
 }
+
+/* Mobile Back Button */
+.backBtn {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  margin-bottom: 16px;
+  align-self: flex-start;
+  transition: all 0.2s;
+}
+
+.backBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.backBtn svg {
+  transition: transform 0.2s;
+}
+
+.backBtn:hover svg {
+  transform: translateX(-2px);
+}
+
+/* Responsive Master-Detail Layout */
+@media (max-width: 768px) {
+  .overlay {
+    padding: 0;
+  }
+
+  .panel {
+    height: 100vh;
+    border-radius: 0;
+    border: none;
+    max-width: 100%;
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+  }
+
+  .main {
+    width: 100%;
+  }
+
+  .sidebarHidden {
+    display: none !important;
+  }
+
+  .mainHidden {
+    display: none !important;
+  }
+
+  .backBtn {
+    display: inline-flex;
+  }
+
+  .profileHeader {
+    padding: 16px;
+  }
+
+  .tabContent {
+    padding: 16px;
+  }
+
+  .chatMessages {
+    max-height: calc(100vh - 350px);
+  }
+}
+
