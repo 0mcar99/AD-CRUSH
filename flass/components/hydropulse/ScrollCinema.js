@@ -202,7 +202,7 @@ export default function ScrollCinema() {
         {steps.map((step, idx) => (
           <div key={idx} className={styles.mobileCard}>
             <div className={styles.mobileVisual}>
-              <div style={{ width: '120px', height: '120px' }}>
+              <div style={{ width: '120px', height: '120px', position: 'relative' }}>
                 {renderSVGGraphic(idx)}
               </div>
             </div>

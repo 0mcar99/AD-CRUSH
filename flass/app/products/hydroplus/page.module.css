@@ -1256,3 +1256,149 @@
   color: var(--accent-orange-light);
 }
 
+/* Ratings Stats Dashboard on the left column */
+.reviewsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.ratingsDashboard {
+  composes: glassCard from global;
+  padding: 32px;
+  background: rgba(255, 107, 0, 0.01);
+  border: 1px solid rgba(255, 107, 0, 0.1);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dashboardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.dashboardScoreBlock {
+  display: flex;
+  align-items: baseline;
+}
+
+.dashboardBigScore {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.dashboardMaxScore {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
+.dashboardMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dashboardStars {
+  display: flex;
+  gap: 2px;
+}
+
+.dashboardTotalText {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.liveStatusBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  padding: 6px 12px;
+  border-radius: 20px;
+  margin-left: auto;
+}
+
+.livePulseDot {
+  width: 6px;
+  height: 6px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #10b981;
+  animation: pulseLight 1.5s infinite;
+}
+
+.liveBadgeText {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: #34d399;
+  text-transform: uppercase;
+}
+
+.progressBarList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 13px;
+}
+
+.progressLabel {
+  width: 50px;
+  color: var(--text-muted);
+}
+
+.progressTrack {
+  flex-grow: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--accent-orange);
+  border-radius: 4px;
+  animation: fillWidthAnimation 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  width: 0; /* starts at 0 and animates to var(--target-width) */
+}
+
+.progressPct {
+  width: 35px;
+  text-align: right;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+
+@keyframes pulseLight {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.4; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fillWidthAnimation {
+  to { width: var(--target-width); }
+}
+
+

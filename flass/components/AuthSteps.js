@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import s from "./AuthModal.module.css";
 import { countries } from "@/lib/countries";
 
@@ -450,13 +450,48 @@ export function StepGoogleAuth({ onSelectAccount, onBack, error, loading }) {
   const [showCustom, setShowCustom] = useState(false);
   const [handshakeStep, setHandshakeStep] = useState(0);
   const [selectedEmail, setSelectedEmail] = useState("");
+  const [accounts, setAccounts] = useState([]);
 
-  const accounts = [
-    { name: "Omkar", email: "omkar@gmail.com", avatar: "O" },
-    { name: "Ad Crush Tester", email: "tester@adcrush.com", avatar: "T" }
-  ];
+  // Load saved Google accounts from localStorage on component mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("google_accounts_cache");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setAccounts(parsed);
+          return;
+        }
+      }
+    } catch (e) {
+      console.error("Error reading Google accounts cache:", e);
+    }
+    // If no previous login account exists, open the input entry directly
+    setShowCustom(true);
+  }, []);
 
   const handleSelect = (email) => {
+    // Save/cache this email into localStorage on successful select/login
+    try {
+      const saved = localStorage.getItem("google_accounts_cache");
+      let list = saved ? JSON.parse(saved) : [];
+      if (!Array.isArray(list)) list = [];
+      
+      const exists = list.some(acc => acc.email.toLowerCase() === email.toLowerCase());
+      if (!exists) {
+        const username = email.split("@")[0];
+        const newAccount = {
+          name: username.charAt(0).toUpperCase() + username.slice(1),
+          email: email.toLowerCase(),
+          avatar: username.charAt(0).toUpperCase()
+        };
+        list.push(newAccount);
+        localStorage.setItem("google_accounts_cache", JSON.stringify(list));
+      }
+    } catch (e) {
+      console.error("Error writing Google accounts cache:", e);
+    }
+
     setSelectedEmail(email);
     let step = 1;
     setHandshakeStep(step);
@@ -565,7 +600,7 @@ export function StepGoogleAuth({ onSelectAccount, onBack, error, loading }) {
           </button>
         ))}
 
-        {!showCustom ? (
+        {accounts.length > 0 && !showCustom ? (
           <button
             type="button"
             onClick={() => setShowCustom(true)}
@@ -629,9 +664,11 @@ export function StepGoogleAuth({ onSelectAccount, onBack, error, loading }) {
               <button type="submit" className={s.primaryBtn} style={{ margin: 0, padding: "10px 16px", flex: 1, borderRadius: "12px" }}>
                 Next
               </button>
-              <button type="button" className={s.primaryBtn} onClick={() => setShowCustom(false)} style={{ margin: 0, padding: "10px 16px", flex: 1, borderRadius: "12px", background: "none", border: "1px solid var(--border)", color: "var(--text-primary)" }}>
-                Cancel
-              </button>
+              {accounts.length > 0 && (
+                <button type="button" className={s.primaryBtn} onClick={() => setShowCustom(false)} style={{ margin: 0, padding: "10px 16px", flex: 1, borderRadius: "12px", background: "none", border: "1px solid var(--border)", color: "var(--text-primary)" }}>
+                  Cancel
+                </button>
+              )}
             </div>
           </form>
         )}
