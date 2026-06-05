@@ -24,14 +24,14 @@ export async function POST(request) {
         return Response.json({ error: "Invalid email format." }, { status: 400, headers: rl.headers });
       }
       // For password reset or email OTP login, the email must exist
-      if (!emailExists(target)) {
+      if (!(await emailExists(target))) {
         return Response.json({ error: "No account found with this email." }, { status: 404, headers: rl.headers });
       }
     }
 
     if (type === "phone") {
       // Validate that a registered user has this phone number
-      const allUsers = getAllUsers();
+      const allUsers = await getAllUsers();
       const phoneDigits = target.replace(/[\s\-()]/g, "");
       const userWithPhone = allUsers.find((u) => {
         const storedDigits = (u.phone || "").replace(/[\s\-()]/g, "");

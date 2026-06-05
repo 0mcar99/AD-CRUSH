@@ -43,30 +43,32 @@ function mergeById(localArr, dbArr) {
 
 export async function getReviews() {
   const localReviews = read().filter((r) => r.status === "approved");
-  try {
-    const { data, error } = await supabase
-      .from('hydropulse_reviews')
-      .select('*')
-      .eq('status', 'approved')
-      .order('submitted_at', { ascending: false });
-    if (!error && data) {
-      const dbReviews = data.map(r => ({
-        id: r.id,
-        name: r.reviewer_name,
-        rating: r.rating,
-        location: r.location || "India",
-        comment: r.comment,
-        initial: r.reviewer_name ? r.reviewer_name.charAt(0).toUpperCase() : 'A',
-        verified: r.verified || false,
-        status: r.status || 'approved',
-        submittedAt: r.submitted_at,
-        submittedByIp: r.ip_address,
-        date: new Date(r.submitted_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-      }));
-      return mergeById(localReviews, dbReviews).sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('hydropulse_reviews')
+        .select('*')
+        .eq('status', 'approved')
+        .order('submitted_at', { ascending: false });
+      if (!error && data) {
+        const dbReviews = data.map(r => ({
+          id: r.id,
+          name: r.reviewer_name,
+          rating: r.rating,
+          location: r.location || "India",
+          comment: r.comment,
+          initial: r.reviewer_name ? r.reviewer_name.charAt(0).toUpperCase() : 'A',
+          verified: r.verified || false,
+          status: r.status || 'approved',
+          submittedAt: r.submitted_at,
+          submittedByIp: r.ip_address,
+          date: new Date(r.submitted_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+        }));
+        return mergeById(localReviews, dbReviews).sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+      }
+    } catch (err) {
+      logger.warn("SUPABASE_GET_REVIEWS_FALLBACK", { error: err.message });
     }
-  } catch (err) {
-    logger.warn("SUPABASE_GET_REVIEWS_FALLBACK", { error: err.message });
   }
   return localReviews;
 }

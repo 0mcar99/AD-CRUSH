@@ -33,7 +33,7 @@ export async function POST(request) {
       let sessionEmail = target;
       const isPhone = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(target);
       if (isPhone) {
-        const allUsers = getAllUsers();
+        const allUsers = await getAllUsers();
         const phoneDigits = target.replace(/[\s\-()]/g, "");
         const userWithPhone = allUsers.find((u) => {
           const storedDigits = (u.phone || "").replace(/[\s\-()]/g, "");

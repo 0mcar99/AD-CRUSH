@@ -3,7 +3,7 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-const secretKey = process.env.SESSION_SECRET;
+const secretKey = process.env.SESSION_SECRET || "fallback-adcrush-session-secret-key-32-chars-long";
 const encodedKey = new TextEncoder().encode(secretKey);
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 

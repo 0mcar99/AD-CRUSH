@@ -43,9 +43,10 @@ function mergeById(localArr, dbArr) {
 
 export async function getAll() {
   const localSubscribers = read();
-  try {
-    const { data, error } = await supabase
-      .from('subscribers')
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('subscribers')
       .select('*')
       .order('subscribed_at', { ascending: false });
     if (!error && data) {
@@ -57,8 +58,9 @@ export async function getAll() {
       }));
       return mergeById(localSubscribers, dbSubscribers).sort((a, b) => new Date(b.subscribedAt) - new Date(a.subscribedAt));
     }
-  } catch (err) {
-    logger.warn("SUPABASE_GET_SUBSCRIBERS_FALLBACK", { error: err.message });
+    } catch (err) {
+      logger.warn("SUPABASE_GET_SUBSCRIBERS_FALLBACK", { error: err.message });
+    }
   }
   return localSubscribers;
 }

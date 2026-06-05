@@ -83,33 +83,37 @@ function mergeById(localArr, dbArr) {
 
 export async function getAll() {
   const localSubmissions = read();
-  try {
-    const { data, error } = await supabase
-      .from('campaign_submissions')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (!error && data) {
-      const dbSubmissions = data.map(mapSubmissionFromDb);
-      return mergeById(localSubmissions, dbSubmissions).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('campaign_submissions')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (!error && data) {
+        const dbSubmissions = data.map(mapSubmissionFromDb);
+        return mergeById(localSubmissions, dbSubmissions).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      }
+    } catch (err) {
+      logger.warn("SUPABASE_GET_SUBMISSIONS_FALLBACK", { error: err.message });
     }
-  } catch (err) {
-    logger.warn("SUPABASE_GET_SUBMISSIONS_FALLBACK", { error: err.message });
   }
   return localSubmissions;
 }
 
 export async function getById(id) {
-  try {
-    const { data, error } = await supabase
-      .from('campaign_submissions')
-      .select('*')
-      .eq('id', id)
-      .limit(1);
-    if (!error && data && data.length > 0) {
-      return mapSubmissionFromDb(data[0]);
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('campaign_submissions')
+        .select('*')
+        .eq('id', id)
+        .limit(1);
+      if (!error && data && data.length > 0) {
+        return mapSubmissionFromDb(data[0]);
+      }
+    } catch (err) {
+      logger.warn("SUPABASE_GET_SUBMISSION_BY_ID_FALLBACK", { id, error: err.message });
     }
-  } catch (err) {
-    logger.warn("SUPABASE_GET_SUBMISSION_BY_ID_FALLBACK", { id, error: err.message });
   }
   return read().find((s) => s.id === id) || null;
 }

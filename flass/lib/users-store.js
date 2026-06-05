@@ -62,27 +62,29 @@ export async function findByEmail(email) {
   }
 
   // 1. Try to fetch from Supabase first
-  try {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('email', cleaned)
-      .limit(1);
-    if (!error && data && data.length > 0) {
-      const u = data[0];
-      return {
-        id: u.id,
-        email: u.email,
-        phone: u.phone || "",
-        countryCode: u.country_code || "+91",
-        role: u.role || "user",
-        createdAt: u.created_at || "",
-        lastLoginAt: u.last_login_at || null,
-        passwordHash: u.password_hash || ""
-      };
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('email', cleaned)
+        .limit(1);
+      if (!error && data && data.length > 0) {
+        const u = data[0];
+        return {
+          id: u.id,
+          email: u.email,
+          phone: u.phone || "",
+          countryCode: u.country_code || "+91",
+          role: u.role || "user",
+          createdAt: u.created_at || "",
+          lastLoginAt: u.last_login_at || null,
+          passwordHash: u.password_hash || ""
+        };
+      }
+    } catch (err) {
+      logger.warn("SUPABASE_USER_LOOKUP_FALLBACK", { email: cleaned, error: err.message });
     }
-  } catch (err) {
-    logger.warn("SUPABASE_USER_LOOKUP_FALLBACK", { email: cleaned, error: err.message });
   }
 
   // 2. Fallback to local store
@@ -181,7 +183,7 @@ export async function verifyUser(email, password) {
       all[idx].lastLoginAt = new Date().toISOString();
       write(all);
       syncProfile(all[idx]);
-    } else {
+    } else if (supabase) {
       // User registered on Vercel (cloud-only)
       try {
         await supabase
@@ -203,22 +205,24 @@ export async function verifyUser(email, password) {
  */
 export async function getAllUsers() {
   const localUsers = read().map(({ passwordHash, ...user }) => user);
-  try {
-    const { data, error } = await supabase.from('profiles').select('*');
-    if (!error && data) {
-      const dbUsers = data.map(u => ({
-        id: u.id,
-        email: u.email,
-        phone: u.phone || "",
-        countryCode: u.country_code || "+91",
-        role: u.role || "user",
-        createdAt: u.created_at || "",
-        lastLoginAt: u.last_login_at || null
-      }));
-      return mergeById(localUsers, dbUsers);
+  if (supabase) {
+    try {
+      const { data, error } = await supabase.from('profiles').select('*');
+      if (!error && data) {
+        const dbUsers = data.map(u => ({
+          id: u.id,
+          email: u.email,
+          phone: u.phone || "",
+          countryCode: u.country_code || "+91",
+          role: u.role || "user",
+          createdAt: u.created_at || "",
+          lastLoginAt: u.last_login_at || null
+        }));
+        return mergeById(localUsers, dbUsers);
+      }
+    } catch (err) {
+      logger.warn("SUPABASE_GET_USERS_FALLBACK", { error: err.message });
     }
-  } catch (err) {
-    logger.warn("SUPABASE_GET_USERS_FALLBACK", { error: err.message });
   }
   return localUsers;
 }
@@ -243,16 +247,18 @@ export async function updatePassword(email, newPassword) {
   }
 
   // Update directly on Supabase profiles table
-  try {
-    const { error } = await supabase
-      .from('profiles')
-      .update({ password_hash: passwordHash })
-      .eq('email', cleaned);
-    if (error) {
-      logger.warn("SUPABASE_PASSWORD_RESET_SYNC_ERROR", { email: cleaned, error: error.message });
+  if (supabase) {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ password_hash: passwordHash })
+        .eq('email', cleaned);
+      if (error) {
+        logger.warn("SUPABASE_PASSWORD_RESET_SYNC_ERROR", { email: cleaned, error: error.message });
+      }
+    } catch (err) {
+      logger.warn("SUPABASE_PASSWORD_RESET_SYNC_ERROR", { email: cleaned, error: err.message });
     }
-  } catch (err) {
-    logger.warn("SUPABASE_PASSWORD_RESET_SYNC_ERROR", { email: cleaned, error: err.message });
   }
 
   logger.info("PASSWORD_RESET", { email: cleaned.slice(0, 3) + "***" });
@@ -275,7 +281,7 @@ export async function updateLastLogin(email) {
     syncProfile(all[idx]);
     const { passwordHash: _ph, ...safeUser } = all[idx];
     return safeUser;
-  } else {
+  } else if (supabase) {
     // Cloud-only user (Vercel registration)
     try {
       const loginTime = new Date().toISOString();

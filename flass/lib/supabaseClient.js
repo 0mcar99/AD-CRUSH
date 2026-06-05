@@ -4,10 +4,10 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error("Missing Supabase configuration: Ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set in environment files.");
+  console.warn("⚠️ WARNING: Missing Supabase configurations in environment variables. Falling back to local JSON store.");
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = (supabaseUrl && supabaseAnonKey) ? createClient(supabaseUrl, supabaseAnonKey) : null;
 
 // ==========================================
 // GUEST LIFECYCLE SYNC HELPERS (WITH GRACEFUL FALLBACKS)
@@ -15,6 +15,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // 1. Sync User / Admin Profile
 export async function syncProfile(user) {
+  if (!supabase) return;
   if (!user) return;
   try {
     const { error } = await supabase
@@ -39,6 +40,7 @@ export async function syncProfile(user) {
 
 // 2. Sync Campaign Wizard Submissions
 export async function syncSubmission(entry) {
+  if (!supabase) return;
   if (!entry) return;
   try {
     // Upsert visitor to get ID
@@ -84,6 +86,7 @@ export async function syncSubmission(entry) {
 
 // 3. Sync User & Admin Chats
 export async function syncChat(email, role, text) {
+  if (!supabase) return;
   if (!email || !role || !text) return;
   try {
     const { data } = await supabase
@@ -111,6 +114,7 @@ export async function syncChat(email, role, text) {
 
 // 4. Sync Newsletter Subscribers
 export async function syncSubscriber(entry) {
+  if (!supabase) return;
   if (!entry) return;
   try {
     const { data } = await supabase
@@ -140,6 +144,7 @@ export async function syncSubscriber(entry) {
 
 // 5. Sync HydroPulse Product Orders
 export async function syncOrder(order) {
+  if (!supabase) return;
   if (!order) return;
   try {
     const { data } = await supabase
@@ -176,6 +181,7 @@ export async function syncOrder(order) {
 
 // 6. Sync HydroPulse Product Reviews
 export async function syncReview(review) {
+  if (!supabase) return;
   if (!review) return;
   try {
     const { error } = await supabase
@@ -202,6 +208,7 @@ export async function syncReview(review) {
 
 // 7. Delete Campaign Wizard Submission
 export async function deleteSubmission(id) {
+  if (!supabase) return;
   if (!id) return;
   try {
     const { error } = await supabase

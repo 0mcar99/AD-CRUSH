@@ -27,30 +27,32 @@ export async function getChats(email) {
   const localChats = read()[cleaned] || [];
 
   let dbChats = [];
-  try {
-    const { data: vis } = await supabase
-      .from('visitors')
-      .select('id')
-      .eq('email', cleaned)
-      .limit(1);
-    const visitorId = vis && vis[0] ? vis[0].id : null;
+  if (supabase) {
+    try {
+      const { data: vis } = await supabase
+        .from('visitors')
+        .select('id')
+        .eq('email', cleaned)
+        .limit(1);
+      const visitorId = vis && vis[0] ? vis[0].id : null;
 
-    if (visitorId) {
-      const { data, error } = await supabase
-        .from('chats')
-        .select('*')
-        .eq('visitor_id', visitorId)
-        .order('created_at', { ascending: true });
-      if (!error && data) {
-        dbChats = data.map(row => ({
-          role: row.sender,
-          text: row.message,
-          timestamp: row.created_at
-        }));
+      if (visitorId) {
+        const { data, error } = await supabase
+          .from('chats')
+          .select('*')
+          .eq('visitor_id', visitorId)
+          .order('created_at', { ascending: true });
+        if (!error && data) {
+          dbChats = data.map(row => ({
+            role: row.sender,
+            text: row.message,
+            timestamp: row.created_at
+          }));
+        }
       }
+    } catch (err) {
+      logger.warn("SUPABASE_GET_CHATS_FALLBACK", { email: cleaned, error: err.message });
     }
-  } catch (err) {
-    logger.warn("SUPABASE_GET_CHATS_FALLBACK", { email: cleaned, error: err.message });
   }
 
   if (localChats.length === 0 && dbChats.length === 0) {
@@ -126,26 +128,28 @@ export function addMessage(email, role, text) {
  */
 export async function getChatUsers() {
   // 1. Try to fetch from Supabase
-  try {
-    const { data, error } = await supabase
-      .from('chats')
-      .select('message, sender, created_at, visitors(email)')
-      .order('created_at', { ascending: true });
-    if (!error && data) {
-      const visitorMap = new Map();
-      for (const row of data) {
-        const email = row.visitors?.email;
-        if (!email) continue;
-        visitorMap.set(email, {
-          email,
-          lastMessage: row.message,
-          timestamp: row.created_at
-        });
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('chats')
+        .select('message, sender, created_at, visitors(email)')
+        .order('created_at', { ascending: true });
+      if (!error && data) {
+        const visitorMap = new Map();
+        for (const row of data) {
+          const email = row.visitors?.email;
+          if (!email) continue;
+          visitorMap.set(email, {
+            email,
+            lastMessage: row.message,
+            timestamp: row.created_at
+          });
+        }
+        return Array.from(visitorMap.values());
       }
-      return Array.from(visitorMap.values());
+    } catch (err) {
+      logger.warn("SUPABASE_GET_CHAT_USERS_FALLBACK", { error: err.message });
     }
-  } catch (err) {
-    logger.warn("SUPABASE_GET_CHAT_USERS_FALLBACK", { error: err.message });
   }
 
   // 2. Fallback to local store

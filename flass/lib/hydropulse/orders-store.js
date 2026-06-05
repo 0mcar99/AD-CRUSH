@@ -179,31 +179,33 @@ function mergeById(localArr, dbArr) {
 
 export async function getAllOrders() {
   const localOrders = read();
-  try {
-    const { data, error } = await supabase
-      .from('hydropulse_orders')
-      .select('*')
-      .order('placed_at', { ascending: false });
-    if (!error && data) {
-      const dbOrders = data.map(o => ({
-        id: o.id,
-        name: o.customer_name,
-        phone: o.customer_phone,
-        email: o.customer_email || "",
-        address: o.shipping_address,
-        zip: o.zip_code,
-        paymentMethod: o.payment_method,
-        items: o.items,
-        totalAmount: o.total_amount,
-        currency: "INR",
-        status: o.status,
-        placedAt: o.placed_at,
-        updatedAt: o.placed_at
-      }));
-      return mergeById(localOrders, dbOrders).sort((a, b) => new Date(b.placedAt) - new Date(a.placedAt));
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('hydropulse_orders')
+        .select('*')
+        .order('placed_at', { ascending: false });
+      if (!error && data) {
+        const dbOrders = data.map(o => ({
+          id: o.id,
+          name: o.customer_name,
+          phone: o.customer_phone,
+          email: o.customer_email || "",
+          address: o.shipping_address,
+          zip: o.zip_code,
+          paymentMethod: o.payment_method,
+          items: o.items,
+          totalAmount: o.total_amount,
+          currency: "INR",
+          status: o.status,
+          placedAt: o.placed_at,
+          updatedAt: o.placed_at
+        }));
+        return mergeById(localOrders, dbOrders).sort((a, b) => new Date(b.placedAt) - new Date(a.placedAt));
+      }
+    } catch (err) {
+      logger.warn("SUPABASE_GET_ORDERS_FALLBACK", { error: err.message });
     }
-  } catch (err) {
-    logger.warn("SUPABASE_GET_ORDERS_FALLBACK", { error: err.message });
   }
   return localOrders;
 }
