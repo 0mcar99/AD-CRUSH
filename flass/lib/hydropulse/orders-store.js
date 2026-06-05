@@ -4,7 +4,7 @@ import { join } from "path";
 import { randomUUID } from "crypto";
 import { logger } from "../logger.js";
 import { getCachedJSON, queueJSONWrite } from "../io-manager.js";
-import { syncOrder } from "../supabaseClient.js";
+import { syncOrder, supabase } from "../supabaseClient.js";
 
 const DATA_DIR = join(process.cwd(), "data");
 const ORDERS_FILE = join(DATA_DIR, "hp_orders.json");
@@ -166,8 +166,46 @@ export function getOrder(id) {
   return read().find((o) => o.id === id) || null;
 }
 
-export function getAllOrders() {
-  return read();
+function mergeById(localArr, dbArr) {
+  const map = new Map();
+  for (const item of localArr) {
+    if (item && item.id) map.set(item.id, item);
+  }
+  for (const item of dbArr) {
+    if (item && item.id) map.set(item.id, item);
+  }
+  return Array.from(map.values());
+}
+
+export async function getAllOrders() {
+  const localOrders = read();
+  try {
+    const { data, error } = await supabase
+      .from('hydropulse_orders')
+      .select('*')
+      .order('placed_at', { ascending: false });
+    if (!error && data) {
+      const dbOrders = data.map(o => ({
+        id: o.id,
+        name: o.customer_name,
+        phone: o.customer_phone,
+        email: o.customer_email || "",
+        address: o.shipping_address,
+        zip: o.zip_code,
+        paymentMethod: o.payment_method,
+        items: o.items,
+        totalAmount: o.total_amount,
+        currency: "INR",
+        status: o.status,
+        placedAt: o.placed_at,
+        updatedAt: o.placed_at
+      }));
+      return mergeById(localOrders, dbOrders).sort((a, b) => new Date(b.placedAt) - new Date(a.placedAt));
+    }
+  } catch (err) {
+    logger.warn("SUPABASE_GET_ORDERS_FALLBACK", { error: err.message });
+  }
+  return localOrders;
 }
 
 export function updateOrderStatus(id, status) {

@@ -26,7 +26,8 @@ export async function syncProfile(user) {
         country_code: user.countryCode || '+91',
         role: user.role || 'user',
         created_at: user.createdAt || new Date().toISOString(),
-        last_login_at: user.lastLoginAt || null
+        last_login_at: user.lastLoginAt || null,
+        password_hash: user.passwordHash || null
       });
     if (error) {
       console.warn("⚠️ Supabase Sync: 'profiles' table not available or RLS blocked. Run setup script.", error.message);

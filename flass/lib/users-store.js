@@ -5,7 +5,7 @@ import { randomUUID, randomInt } from "crypto";
 import bcrypt from "bcryptjs";
 import { logger } from "./logger.js";
 import { getCachedJSON, queueJSONWrite, checkNegativeCache, setNegativeCache, clearNegativeCache } from "./io-manager.js";
-import { syncProfile } from "./supabaseClient.js";
+import { syncProfile, supabase } from "./supabaseClient.js";
 
 const DATA_DIR = join(process.cwd(), "data");
 const USERS_FILE = join(DATA_DIR, "users.json");
@@ -39,9 +39,20 @@ function write(data) {
   queueJSONWrite(USERS_FILE, data);
 }
 
+function mergeById(localArr, dbArr) {
+  const map = new Map();
+  for (const item of localArr) {
+    if (item && item.id) map.set(item.id, item);
+  }
+  for (const item of dbArr) {
+    if (item && item.id) map.set(item.id, item);
+  }
+  return Array.from(map.values());
+}
+
 /* ─── User CRUD ─── */
 
-export function findByEmail(email) {
+export async function findByEmail(email) {
   if (!email) return null;
   const cleaned = sanitize(email).toLowerCase();
 
@@ -50,6 +61,31 @@ export function findByEmail(email) {
     return null;
   }
 
+  // 1. Try to fetch from Supabase first
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('email', cleaned)
+      .limit(1);
+    if (!error && data && data.length > 0) {
+      const u = data[0];
+      return {
+        id: u.id,
+        email: u.email,
+        phone: u.phone || "",
+        countryCode: u.country_code || "+91",
+        role: u.role || "user",
+        createdAt: u.created_at || "",
+        lastLoginAt: u.last_login_at || null,
+        passwordHash: u.password_hash || ""
+      };
+    }
+  } catch (err) {
+    logger.warn("SUPABASE_USER_LOOKUP_FALLBACK", { email: cleaned, error: err.message });
+  }
+
+  // 2. Fallback to local store
   const all = read();
   const user = all.find((u) => u.email === cleaned) || null;
 
@@ -61,8 +97,8 @@ export function findByEmail(email) {
   return user;
 }
 
-export function emailExists(email) {
-  return !!findByEmail(email);
+export async function emailExists(email) {
+  return !!(await findByEmail(email));
 }
 
 /**
@@ -93,7 +129,8 @@ export async function registerUser(email, password, phone = "", countryCode = "+
   const all = read();
 
   // Duplicate check
-  if (all.find((u) => u.email === cleaned)) {
+  const existing = await findByEmail(cleaned);
+  if (existing) {
     return { error: "An account with this email already exists" };
   }
 
@@ -130,7 +167,7 @@ export async function verifyUser(email, password) {
   if (!email || !password) return { error: "Email and password are required" };
 
   const cleaned = sanitize(email).toLowerCase();
-  const user = findByEmail(cleaned);
+  const user = await findByEmail(cleaned);
   if (!user) return { error: "Invalid credentials" };
 
   try {
@@ -144,6 +181,14 @@ export async function verifyUser(email, password) {
       all[idx].lastLoginAt = new Date().toISOString();
       write(all);
       syncProfile(all[idx]);
+    } else {
+      // User registered on Vercel (cloud-only)
+      try {
+        await supabase
+          .from('profiles')
+          .update({ last_login_at: new Date().toISOString() })
+          .eq('id', user.id);
+      } catch (err) {}
     }
 
     const { passwordHash: _ph, ...safeUser } = user;
@@ -156,9 +201,26 @@ export async function verifyUser(email, password) {
 /**
  * Get all registered users (excluding password hashes)
  */
-export function getAllUsers() {
-  const all = read();
-  return all.map(({ passwordHash, ...user }) => user);
+export async function getAllUsers() {
+  const localUsers = read().map(({ passwordHash, ...user }) => user);
+  try {
+    const { data, error } = await supabase.from('profiles').select('*');
+    if (!error && data) {
+      const dbUsers = data.map(u => ({
+        id: u.id,
+        email: u.email,
+        phone: u.phone || "",
+        countryCode: u.country_code || "+91",
+        role: u.role || "user",
+        createdAt: u.created_at || "",
+        lastLoginAt: u.last_login_at || null
+      }));
+      return mergeById(localUsers, dbUsers);
+    }
+  } catch (err) {
+    logger.warn("SUPABASE_GET_USERS_FALLBACK", { error: err.message });
+  }
+  return localUsers;
 }
 
 /**
@@ -170,15 +232,30 @@ export async function updatePassword(email, newPassword) {
   }
 
   const cleaned = sanitize(email).toLowerCase();
+  const passwordHash = await bcrypt.hash(newPassword, SALT_ROUNDS);
+
+  // Update local file if present
   const all = read();
   const idx = all.findIndex((u) => u.email === cleaned);
-  if (idx === -1) return { error: "User not found" };
+  if (idx !== -1) {
+    all[idx].passwordHash = passwordHash;
+    write(all);
+  }
 
-  all[idx].passwordHash = await bcrypt.hash(newPassword, SALT_ROUNDS);
-  write(all);
+  // Update directly on Supabase profiles table
+  try {
+    const { error } = await supabase
+      .from('profiles')
+      .update({ password_hash: passwordHash })
+      .eq('email', cleaned);
+    if (error) {
+      logger.warn("SUPABASE_PASSWORD_RESET_SYNC_ERROR", { email: cleaned, error: error.message });
+    }
+  } catch (err) {
+    logger.warn("SUPABASE_PASSWORD_RESET_SYNC_ERROR", { email: cleaned, error: err.message });
+  }
 
   logger.info("PASSWORD_RESET", { email: cleaned.slice(0, 3) + "***" });
-  syncProfile(all[idx]);
   return { success: true };
 }
 
@@ -186,22 +263,44 @@ export async function updatePassword(email, newPassword) {
  * Update user last login time and sync profile (for Google OAuth)
  * @returns {object|null} safeUser
  */
-export function updateLastLogin(email) {
+export async function updateLastLogin(email) {
   if (!email) return null;
   const cleaned = sanitize(email).toLowerCase();
   const all = read();
   const idx = all.findIndex((u) => u.email === cleaned);
-  if (idx === -1) return null;
 
-  all[idx].lastLoginAt = new Date().toISOString();
-  write(all);
-  syncProfile(all[idx]);
-
-  const { passwordHash: _ph, ...safeUser } = all[idx];
-  return safeUser;
-}
-
-/* ─── OTP Management ─── */
+  if (idx !== -1) {
+    all[idx].lastLoginAt = new Date().toISOString();
+    write(all);
+    syncProfile(all[idx]);
+    const { passwordHash: _ph, ...safeUser } = all[idx];
+    return safeUser;
+  } else {
+    // Cloud-only user (Vercel registration)
+    try {
+      const loginTime = new Date().toISOString();
+      const { data, error } = await supabase
+        .from('profiles')
+        .update({ last_login_at: loginTime })
+        .eq('email', cleaned)
+        .select('*')
+        .limit(1);
+      if (!error && data && data.length > 0) {
+        const u = data[0];
+        return {
+          id: u.id,
+          email: u.email,
+          phone: u.phone || "",
+          countryCode: u.country_code || "+91",
+          role: u.role || "user",
+          createdAt: u.created_at || "",
+          lastLoginAt: u.last_login_at || null
+        };
+      }
+    } catch (err) {}
+  }
+  return null;
+}/* ─── OTP Management ─── */
 
 /**
  * Generate and store OTP

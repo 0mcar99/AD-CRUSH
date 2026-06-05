@@ -23,15 +23,15 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const query = (searchParams.get("q") || "").toLowerCase().trim();
 
-    const registeredUsers = getAllUsers();
-    const submissions = getAllSubmissions();
-    const chatUsers = getChatUsers();
+    const registeredUsers = await getAllUsers();
+    const submissions = await getAllSubmissions();
+    const chatUsers = await getChatUsers();
 
     // Fetch HydroPulse orders to aggregate order metrics
     let orders = [];
     try {
       const { getAllOrders } = await import("@/lib/hydropulse/orders-store");
-      orders = getAllOrders();
+      orders = await getAllOrders();
     } catch (e) {
       logger.error("HP_ORDERS_IMPORT_ERROR", { error: e.message });
     }

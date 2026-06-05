@@ -3,7 +3,7 @@
 import { join } from "path";
 import { logger } from "./logger.js";
 import { getCachedJSON, queueJSONWrite } from "./io-manager.js";
-import { syncChat } from "./supabaseClient.js";
+import { syncChat, supabase } from "./supabaseClient.js";
 
 const DATA_DIR = join(process.cwd(), "data");
 const CHATS_FILE = join(DATA_DIR, "chats.json");
@@ -21,12 +21,39 @@ function write(data) {
  * @param {string} email
  * @returns {Array} Array of message objects
  */
-export function getChats(email) {
+export async function getChats(email) {
   if (!email) return [];
   const cleaned = email.toLowerCase().trim();
-  const all = read();
-  if (!all[cleaned]) {
-    // Return default message if no history yet
+  const localChats = read()[cleaned] || [];
+
+  let dbChats = [];
+  try {
+    const { data: vis } = await supabase
+      .from('visitors')
+      .select('id')
+      .eq('email', cleaned)
+      .limit(1);
+    const visitorId = vis && vis[0] ? vis[0].id : null;
+
+    if (visitorId) {
+      const { data, error } = await supabase
+        .from('chats')
+        .select('*')
+        .eq('visitor_id', visitorId)
+        .order('created_at', { ascending: true });
+      if (!error && data) {
+        dbChats = data.map(row => ({
+          role: row.sender,
+          text: row.message,
+          timestamp: row.created_at
+        }));
+      }
+    }
+  } catch (err) {
+    logger.warn("SUPABASE_GET_CHATS_FALLBACK", { email: cleaned, error: err.message });
+  }
+
+  if (localChats.length === 0 && dbChats.length === 0) {
     return [
       {
         role: "bot",
@@ -35,7 +62,20 @@ export function getChats(email) {
       }
     ];
   }
-  return all[cleaned];
+
+  // Merge chats: combine both and sort by timestamp
+  const combined = [...localChats, ...dbChats];
+  // Deduplicate by text + role
+  const seen = new Set();
+  const unique = [];
+  for (const msg of combined) {
+    const key = `${msg.role}:${msg.text}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      unique.push(msg);
+    }
+  }
+  return unique.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 }
 
 /**
@@ -84,7 +124,31 @@ export function addMessage(email, role, text) {
  * Get all users with active chat threads
  * @returns {Array} Array of user chat headers
  */
-export function getChatUsers() {
+export async function getChatUsers() {
+  // 1. Try to fetch from Supabase
+  try {
+    const { data, error } = await supabase
+      .from('chats')
+      .select('message, sender, created_at, visitors(email)')
+      .order('created_at', { ascending: true });
+    if (!error && data) {
+      const visitorMap = new Map();
+      for (const row of data) {
+        const email = row.visitors?.email;
+        if (!email) continue;
+        visitorMap.set(email, {
+          email,
+          lastMessage: row.message,
+          timestamp: row.created_at
+        });
+      }
+      return Array.from(visitorMap.values());
+    }
+  } catch (err) {
+    logger.warn("SUPABASE_GET_CHAT_USERS_FALLBACK", { error: err.message });
+  }
+
+  // 2. Fallback to local store
   const all = read();
   return Object.keys(all).map((email) => {
     const messages = all[email];

@@ -23,16 +23,16 @@ export async function GET(request) {
     if (session.role === "admin") {
       if (targetEmail) {
         // Admin requesting messages of a specific user
-        const chats = getChats(targetEmail);
+        const chats = await getChats(targetEmail);
         return Response.json({ chats }, { headers: rl.headers });
       } else {
         // Admin requesting list of all chat users
-        const users = getChatUsers();
+        const users = await getChatUsers();
         return Response.json({ users }, { headers: rl.headers });
       }
     } else {
       // Normal user requesting their own chat history
-      const chats = getChats(session.email);
+      const chats = await getChats(session.email);
       return Response.json({ chats }, { headers: rl.headers });
     }
   } catch (err) {

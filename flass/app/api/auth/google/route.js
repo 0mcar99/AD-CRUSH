@@ -34,7 +34,7 @@ export async function POST(request) {
     }
 
     // 2. Check if user already exists
-    let user = findByEmail(cleanedEmail);
+    let user = await findByEmail(cleanedEmail);
     let isNewUser = false;
 
     if (!user) {
@@ -53,7 +53,7 @@ export async function POST(request) {
       isNewUser = true;
       logger.info("AUTH_GOOGLE_REGISTER_SUCCESS", { ip, email: redactEmail(cleanedEmail) });
     } else {
-      updateLastLogin(cleanedEmail);
+      await updateLastLogin(cleanedEmail);
       logger.info("AUTH_GOOGLE_LOGIN_SUCCESS", { ip, email: redactEmail(cleanedEmail) });
     }
 

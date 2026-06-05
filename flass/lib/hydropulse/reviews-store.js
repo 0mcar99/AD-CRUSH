@@ -4,7 +4,7 @@ import { join } from "path";
 import { randomUUID } from "crypto";
 import { logger } from "../logger.js";
 import { getCachedJSON, queueJSONWrite, checkNegativeCache, setNegativeCache } from "../io-manager.js";
-import { syncReview } from "../supabaseClient.js";
+import { syncReview, supabase } from "../supabaseClient.js";
 
 const DATA_DIR = join(process.cwd(), "data");
 const REVIEWS_FILE = join(DATA_DIR, "hp_reviews.json");
@@ -28,11 +28,47 @@ function write(data) {
   queueJSONWrite(REVIEWS_FILE, data);
 }
 
+function mergeById(localArr, dbArr) {
+  const map = new Map();
+  for (const item of localArr) {
+    if (item && item.id) map.set(item.id, item);
+  }
+  for (const item of dbArr) {
+    if (item && item.id) map.set(item.id, item);
+  }
+  return Array.from(map.values());
+}
+
 /* ─── CRUD ─── */
 
-export function getReviews() {
-  // Return only approved reviews (status: "approved"), sorted newest first
-  return read().filter((r) => r.status === "approved");
+export async function getReviews() {
+  const localReviews = read().filter((r) => r.status === "approved");
+  try {
+    const { data, error } = await supabase
+      .from('hydropulse_reviews')
+      .select('*')
+      .eq('status', 'approved')
+      .order('submitted_at', { ascending: false });
+    if (!error && data) {
+      const dbReviews = data.map(r => ({
+        id: r.id,
+        name: r.reviewer_name,
+        rating: r.rating,
+        location: r.location || "India",
+        comment: r.comment,
+        initial: r.reviewer_name ? r.reviewer_name.charAt(0).toUpperCase() : 'A',
+        verified: r.verified || false,
+        status: r.status || 'approved',
+        submittedAt: r.submitted_at,
+        submittedByIp: r.ip_address,
+        date: new Date(r.submitted_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+      }));
+      return mergeById(localReviews, dbReviews).sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+    }
+  } catch (err) {
+    logger.warn("SUPABASE_GET_REVIEWS_FALLBACK", { error: err.message });
+  }
+  return localReviews;
 }
 
 export function getAllReviewsAdmin() {

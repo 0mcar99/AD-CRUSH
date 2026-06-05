@@ -144,7 +144,7 @@ export async function GET(request) {
     assert(totalDiskWrites <= 1, `Write Coalescing active: 50 concurrent operations batch-completed in exactly ${totalDiskWrites} disk write(s)!`);
 
     // Verify all 50 subscribers exist
-    const allSubs = getAllSubscribers();
+    const allSubs = await getAllSubscribers();
     const auditSubs = allSubs.filter(s => s.source === "native-audit");
     assert(auditSubs.length === 50, `Data Integrity: exactly 50/50 concurrent subscriber entries correctly written to database!`);
 
@@ -161,12 +161,12 @@ export async function GET(request) {
     const nonexistentKey = `nonexistent_audit_${Date.now()}@attacker.com`;
 
     const hrStart1 = process.hrtime.bigint();
-    const res1 = findByEmail(nonexistentKey);
+    const res1 = await findByEmail(nonexistentKey);
     const hrEnd1 = process.hrtime.bigint();
     const time1 = Number(hrEnd1 - hrStart1);
 
     const hrStart2 = process.hrtime.bigint();
-    const res2 = findByEmail(nonexistentKey);
+    const res2 = await findByEmail(nonexistentKey);
     const hrEnd2 = process.hrtime.bigint();
     const time2 = Number(hrEnd2 - hrStart2);
 

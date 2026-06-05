@@ -15,7 +15,7 @@ export async function GET(request) {
   }
 
   try {
-    const reviews = getReviews();
+    const reviews = await getReviews();
     return Response.json({ reviews }, { status: 200, headers: rl.headers });
   } catch (err) {
     logger.error("HP_REVIEWS_GET_API_ERROR", { ip, error: err.message });

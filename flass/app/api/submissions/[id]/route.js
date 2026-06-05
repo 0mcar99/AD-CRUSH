@@ -22,7 +22,7 @@ export async function GET(request, { params }) {
     return Response.json({ error: "Not found" }, { status: 404, headers: rl.headers });
   }
 
-  const submission = getById(id);
+  const submission = await getById(id);
   if (!submission) {
     return Response.json({ error: "Not found" }, { status: 404, headers: rl.headers });
   }

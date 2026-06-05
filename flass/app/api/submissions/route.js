@@ -17,7 +17,7 @@ export async function GET(request) {
   if (!rl.allowed) return rateLimitResponse(rl);
 
   try {
-    let submissions = getAll();
+    let submissions = await getAll();
     if (session.role !== "admin") {
       const userEmail = (session.email || "").toLowerCase();
       submissions = submissions.filter((s) => (s.email || "").toLowerCase() === userEmail);

@@ -97,7 +97,7 @@ export async function GET(request) {
     }
 
     const { getAllOrders } = await import("@/lib/hydropulse/orders-store");
-    const orders = getAllOrders();
+    const orders = await getAllOrders();
 
     return Response.json({ orders }, { headers: rl.headers });
   } catch (err) {

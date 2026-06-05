@@ -4,7 +4,7 @@ import { join } from "path";
 import { randomUUID } from "crypto";
 import { logger } from "./logger.js";
 import { getCachedJSON, queueJSONWrite } from "./io-manager.js";
-import { syncSubmission, deleteSubmission } from "./supabaseClient.js";
+import { syncSubmission, deleteSubmission, supabase } from "./supabaseClient.js";
 
 const DATA_DIR = join(process.cwd(), "data");
 const DATA_FILE = join(DATA_DIR, "submissions.json");
@@ -43,13 +43,74 @@ function write(data) {
   queueJSONWrite(DATA_FILE, data);
 }
 
-/* ─── CRUD ─── */
-
-export function getAll() {
-  return read();
+/* ─── Db Mapper ─── */
+function mapSubmissionFromDb(row) {
+  return {
+    id: row.id,
+    email: row.email,
+    name: row.name,
+    adType: row.ad_type,
+    productName: row.product_name,
+    tagline: row.tagline,
+    description: row.description,
+    category: row.category,
+    audience: row.audience,
+    platforms: row.platforms,
+    budget: row.budget,
+    timeline: row.timeline,
+    duration: row.duration,
+    website: row.website || "",
+    notes: row.notes || "",
+    status: row.status || "pending",
+    adminNotes: row.admin_notes || "",
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  };
 }
 
-export function getById(id) {
+function mergeById(localArr, dbArr) {
+  const map = new Map();
+  for (const item of localArr) {
+    if (item && item.id) map.set(item.id, item);
+  }
+  for (const item of dbArr) {
+    if (item && item.id) map.set(item.id, item);
+  }
+  return Array.from(map.values());
+}
+
+/* ─── CRUD ─── */
+
+export async function getAll() {
+  const localSubmissions = read();
+  try {
+    const { data, error } = await supabase
+      .from('campaign_submissions')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (!error && data) {
+      const dbSubmissions = data.map(mapSubmissionFromDb);
+      return mergeById(localSubmissions, dbSubmissions).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
+  } catch (err) {
+    logger.warn("SUPABASE_GET_SUBMISSIONS_FALLBACK", { error: err.message });
+  }
+  return localSubmissions;
+}
+
+export async function getById(id) {
+  try {
+    const { data, error } = await supabase
+      .from('campaign_submissions')
+      .select('*')
+      .eq('id', id)
+      .limit(1);
+    if (!error && data && data.length > 0) {
+      return mapSubmissionFromDb(data[0]);
+    }
+  } catch (err) {
+    logger.warn("SUPABASE_GET_SUBMISSION_BY_ID_FALLBACK", { id, error: err.message });
+  }
   return read().find((s) => s.id === id) || null;
 }
 

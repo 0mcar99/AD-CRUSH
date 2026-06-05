@@ -4,7 +4,7 @@ import { join } from "path";
 import { randomUUID } from "crypto";
 import { logger } from "./logger.js";
 import { getCachedJSON, queueJSONWrite } from "./io-manager.js";
-import { syncSubscriber } from "./supabaseClient.js";
+import { syncSubscriber, supabase } from "./supabaseClient.js";
 
 const DATA_DIR = join(process.cwd(), "data");
 const SUBS_FILE = join(DATA_DIR, "subscribers.json");
@@ -28,10 +28,39 @@ function write(data) {
   queueJSONWrite(SUBS_FILE, data);
 }
 
+function mergeById(localArr, dbArr) {
+  const map = new Map();
+  for (const item of localArr) {
+    if (item && item.id) map.set(item.id, item);
+  }
+  for (const item of dbArr) {
+    if (item && item.id) map.set(item.id, item);
+  }
+  return Array.from(map.values());
+}
+
 /* ─── CRUD ─── */
 
-export function getAll() {
-  return read();
+export async function getAll() {
+  const localSubscribers = read();
+  try {
+    const { data, error } = await supabase
+      .from('subscribers')
+      .select('*')
+      .order('subscribed_at', { ascending: false });
+    if (!error && data) {
+      const dbSubscribers = data.map(s => ({
+        id: s.id,
+        email: s.email,
+        subscribedAt: s.subscribed_at,
+        active: s.active
+      }));
+      return mergeById(localSubscribers, dbSubscribers).sort((a, b) => new Date(b.subscribedAt) - new Date(a.subscribedAt));
+    }
+  } catch (err) {
+    logger.warn("SUPABASE_GET_SUBSCRIBERS_FALLBACK", { error: err.message });
+  }
+  return localSubscribers;
 }
 
 export function getCount() {
