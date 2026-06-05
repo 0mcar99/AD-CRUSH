@@ -26,9 +26,23 @@
 
 .logo {
   display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.logoImg {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.logoTextContainer {
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
-  text-decoration: none;
 }
 
 .logoText {

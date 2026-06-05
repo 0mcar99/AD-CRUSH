@@ -27,10 +27,29 @@
 
 .logo {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
   text-decoration: none;
   cursor: pointer;
+}
+
+.logoIcon {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  border-radius: 50%;
+  transition: transform var(--transition-smooth);
+}
+
+.logo:hover .logoIcon {
+  transform: rotate(15deg) scale(1.08);
+}
+
+.logoTextContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .logoText {

@@ -48,12 +48,15 @@ export default function Navbar({ cartCount = 0, onCartClick }) {
       <div className={styles.container}>
         {/* LOGO */}
         <a href="#" className={styles.logo} onClick={(e) => handleLinkClick(e, 'hero')}>
-          <div className={styles.logoText}>
-            <span className={styles.logoHydro}>HYDRO</span>
-            <span className={styles.logoPulse}>PULSE</span>
-            <span className={styles.logoTM}>TM</span>
+          <img src="/logo.png" alt="HydroPulse Logo" className={styles.logoIcon} />
+          <div className={styles.logoTextContainer}>
+            <div className={styles.logoText}>
+              <span className={styles.logoHydro}>HYDRO</span>
+              <span className={styles.logoPulse}>PULSE</span>
+              <span className={styles.logoTM}>TM</span>
+            </div>
+            <span className={styles.logoTagline}>ELECTRONIC WATER CONDITIONER</span>
           </div>
-          <span className={styles.logoTagline}>ELECTRONIC WATER CONDITIONER</span>
         </a>
 
         {/* DESKTOP NAV LINKS */}

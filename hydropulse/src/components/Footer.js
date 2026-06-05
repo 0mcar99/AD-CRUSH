@@ -31,12 +31,15 @@ export default function Footer() {
           {/* Column 1: Brand & Origin */}
           <div className={styles.brandColumn}>
             <div className={styles.logo}>
-              <div className={styles.logoText}>
-                <span className={styles.logoHydro}>HYDRO</span>
-                <span className={styles.logoPulse}>PULSE</span>
-                <span className={styles.logoTM}>TM</span>
+              <img src="/logo.png" alt="HydroPulse Logo" className={styles.logoImg} />
+              <div className={styles.logoTextContainer}>
+                <div className={styles.logoText}>
+                  <span className={styles.logoHydro}>HYDRO</span>
+                  <span className={styles.logoPulse}>PULSE</span>
+                  <span className={styles.logoTM}>TM</span>
+                </div>
+                <span className={styles.logoTagline}>ELECTRONIC WATER CONDITIONER</span>
               </div>
-              <span className={styles.logoTagline}>ELECTRONIC WATER CONDITIONER</span>
             </div>
             <p className={styles.desc}>
               Next-generation Electronic Water Conditioning system powered by patented Hydro-Polarization Technology. 100% chemical-free, salt-free, and maintenance-free limescale protection for homes, agriculture, and industries.
