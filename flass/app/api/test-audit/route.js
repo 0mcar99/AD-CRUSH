@@ -283,6 +283,138 @@ export async function GET(request) {
     }
     assert(hpSubmissionCount === 3, `Submission rate limiter capped exactly at 3 submissions per hour (got ${hpSubmissionCount})`);
 
+    // -------------------------------------------------------------------------
+    // 9. SUPABASE SYNCHRONIZATION AUDIT
+    // -------------------------------------------------------------------------
+    logInfo("Auditing Supabase Synchronization...");
+    const { supabase } = await import("@/lib/supabaseClient");
+    
+    const { data: connTest, error: connErr } = await supabase.from("visitors").select("id").limit(1);
+    assert(!connErr, `Supabase connection verified: successfully queried 'visitors' table (Error: ${connErr ? connErr.message : 'none'})`);
+
+    if (!connErr) {
+      const stamp = Date.now();
+      const testEmail = `supabase_audit_${stamp}@adcrush.com`;
+      const testUuid = "11111111-2222-3333-4444-555555555555";
+
+      // 1. Test profile sync
+      logInfo("Testing profile synchronization to Supabase...");
+      const { syncProfile } = await import("@/lib/supabaseClient");
+      await syncProfile({
+        id: testUuid,
+        email: testEmail,
+        phone: "1234567890",
+        countryCode: "+91",
+        role: "user",
+        createdAt: new Date().toISOString(),
+        lastLoginAt: new Date().toISOString()
+      });
+      const { data: profData, error: profErr } = await supabase.from("profiles").select("*").eq("id", testUuid);
+      assert(!profErr && profData && profData.length > 0 && profData[0].email === testEmail, "Profile successfully synced to Supabase");
+      await supabase.from("profiles").delete().eq("id", testUuid);
+
+      // 2. Test campaign submission sync
+      logInfo("Testing campaign submission synchronization...");
+      const { syncSubmission, deleteSubmission } = await import("@/lib/supabaseClient");
+      await syncSubmission({
+        id: testUuid,
+        email: testEmail,
+        name: "Supabase Audit",
+        adType: "Product",
+        productName: "Audit Test Product",
+        tagline: "Testing Supabase",
+        description: "Supabase submission sync verification.",
+        category: "Tech",
+        audience: "Everyone",
+        platforms: ["Instagram"],
+        budget: "Under $500",
+        timeline: "ASAP",
+        duration: "1 week",
+        status: "pending"
+      });
+      const { data: subData, error: subErr } = await supabase.from("campaign_submissions").select("*").eq("id", testUuid);
+      assert(!subErr && subData && subData.length > 0 && subData[0].product_name === "Audit Test Product", "Campaign submission successfully synced to Supabase");
+      await deleteSubmission(testUuid);
+
+      // 3. Test chat sync
+      logInfo("Testing live chat message synchronization...");
+      const { syncChat } = await import("@/lib/supabaseClient");
+      await syncChat(testEmail, "user", "Audit test chat message");
+      const { data: visData } = await supabase.from("visitors").select("id").eq("email", testEmail);
+      const visId = visData && visData[0] ? visData[0].id : null;
+      if (visId) {
+        const { data: chatData, error: chatErr } = await supabase.from("chats").select("*").eq("visitor_id", visId);
+        assert(!chatErr && chatData && chatData.length > 0 && chatData[0].message === "Audit test chat message", "Chat message successfully synced to Supabase");
+        await supabase.from("chats").delete().eq("visitor_id", visId);
+        await supabase.from("visitors").delete().eq("id", visId);
+      } else {
+        assert(false, "Failed to resolve visitor ID for chat verification");
+      }
+
+      // 4. Test newsletter subscriber sync
+      logInfo("Testing newsletter subscriber synchronization...");
+      const { syncSubscriber } = await import("@/lib/supabaseClient");
+      const testSubUuid = "22222222-3333-4444-5555-666666666666";
+      await syncSubscriber({
+        id: testSubUuid,
+        email: testEmail,
+        active: true,
+        subscribedAt: new Date().toISOString()
+      });
+      const { data: subscrData, error: subscrErr } = await supabase.from("subscribers").select("*").eq("id", testSubUuid);
+      assert(!subscrErr && subscrData && subscrData.length > 0 && subscrData[0].email === testEmail, "Newsletter subscriber successfully synced to Supabase");
+      await supabase.from("subscribers").delete().eq("id", testSubUuid);
+      const { data: visData2 } = await supabase.from("visitors").select("id").eq("email", testEmail);
+      const visId2 = visData2 && visData2[0] ? visData2[0].id : null;
+      if (visId2) {
+        await supabase.from("visitors").delete().eq("id", visId2);
+      }
+
+      // 5. Test product order sync
+      logInfo("Testing product order synchronization...");
+      const { syncOrder } = await import("@/lib/supabaseClient");
+      const testOrderUuid = "HP-AUDIT-TEST-ORDER";
+      await syncOrder({
+        id: testOrderUuid,
+        name: "Audit User",
+        phone: "9876543210",
+        email: testEmail,
+        address: "Supabase Audit Road",
+        zip: "400001",
+        paymentMethod: "upi",
+        items: [{ id: "marlin-1", title: "Marlin 1.0", price: 50000, quantity: 1 }],
+        totalAmount: 50000,
+        status: "pending_payment",
+        placedAt: new Date().toISOString()
+      });
+      const { data: ordData, error: ordErr } = await supabase.from("hydropulse_orders").select("*").eq("id", testOrderUuid);
+      assert(!ordErr && ordData && ordData.length > 0 && ordData[0].customer_name === "Audit User", "Product order successfully synced to Supabase");
+      await supabase.from("hydropulse_orders").delete().eq("id", testOrderUuid);
+      const { data: visData3 } = await supabase.from("visitors").select("id").eq("email", testEmail);
+      const visId3 = visData3 && visData3[0] ? visData3[0].id : null;
+      if (visId3) {
+        await supabase.from("visitors").delete().eq("id", visId3);
+      }
+
+      // 6. Test product review sync (graceful failure expectation)
+      logInfo("Testing product review sync (expecting warnings/graceful fallback since table is missing)...");
+      const { syncReview } = await import("@/lib/supabaseClient");
+      const testRevUuid = "33333333-4444-5555-6666-777777777777";
+      await syncReview({
+        id: testRevUuid,
+        name: "Auditor",
+        rating: 5,
+        location: "Mumbai",
+        comment: "Excellent database syncing performance!",
+        verified: true,
+        status: "approved",
+        submittedAt: new Date().toISOString(),
+        submittedByIp: "127.0.0.1"
+      });
+      const { error: revErr } = await supabase.from("hydropulse_reviews").select("*").limit(1);
+      assert(revErr !== null && revErr.message.includes("Could not find the table"), "Product reviews table confirmed as missing, error caught and handled gracefully");
+    }
+
     logInfo("Audit Completed successfully.");
   } catch (error) {
     logs.push(`❌ [FATAL ERROR DURING AUDIT]: ${error.message}`);

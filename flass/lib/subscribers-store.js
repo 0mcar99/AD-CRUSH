@@ -4,6 +4,7 @@ import { join } from "path";
 import { randomUUID } from "crypto";
 import { logger } from "./logger.js";
 import { getCachedJSON, queueJSONWrite } from "./io-manager.js";
+import { syncSubscriber } from "./supabaseClient.js";
 
 const DATA_DIR = join(process.cwd(), "data");
 const SUBS_FILE = join(DATA_DIR, "subscribers.json");
@@ -71,6 +72,7 @@ export function subscribe(email, source = "homepage") {
   write(all);
 
   logger.info("SUBSCRIBER_ADDED", { id: entry.id, source });
+  syncSubscriber(entry);
   return { entry };
 }
 
@@ -89,5 +91,6 @@ export function unsubscribe(email) {
   write(all);
 
   logger.info("SUBSCRIBER_REMOVED", { id: all[idx].id });
+  syncSubscriber(all[idx]);
   return true;
 }

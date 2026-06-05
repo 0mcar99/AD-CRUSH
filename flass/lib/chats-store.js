@@ -3,6 +3,7 @@
 import { join } from "path";
 import { logger } from "./logger.js";
 import { getCachedJSON, queueJSONWrite } from "./io-manager.js";
+import { syncChat } from "./supabaseClient.js";
 
 const DATA_DIR = join(process.cwd(), "data");
 const CHATS_FILE = join(DATA_DIR, "chats.json");
@@ -75,6 +76,7 @@ export function addMessage(email, role, text) {
   all[cleaned].push(message);
   write(all);
   logger.info("CHAT_MESSAGE_ADDED", { email: cleaned, role });
+  syncChat(cleaned, role, sanitizedText);
   return message;
 }
 

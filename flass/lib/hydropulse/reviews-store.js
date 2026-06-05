@@ -4,6 +4,7 @@ import { join } from "path";
 import { randomUUID } from "crypto";
 import { logger } from "../logger.js";
 import { getCachedJSON, queueJSONWrite, checkNegativeCache, setNegativeCache } from "../io-manager.js";
+import { syncReview } from "../supabaseClient.js";
 
 const DATA_DIR = join(process.cwd(), "data");
 const REVIEWS_FILE = join(DATA_DIR, "hp_reviews.json");
@@ -98,6 +99,7 @@ export function addReview(reviewData, submittedByIp = "unknown") {
     ip: submittedByIp,
   });
 
+  syncReview(review);
   return { review };
 }
 
@@ -114,5 +116,6 @@ export function updateReviewStatus(id, status) {
   write(all);
 
   logger.info("HP_REVIEW_STATUS_UPDATED", { id, status });
+  syncReview(all[idx]);
   return all[idx];
 }

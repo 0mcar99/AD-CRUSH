@@ -4,6 +4,7 @@ import { join } from "path";
 import { randomUUID } from "crypto";
 import { logger } from "../logger.js";
 import { getCachedJSON, queueJSONWrite } from "../io-manager.js";
+import { syncOrder } from "../supabaseClient.js";
 
 const DATA_DIR = join(process.cwd(), "data");
 const ORDERS_FILE = join(DATA_DIR, "hp_orders.json");
@@ -157,6 +158,7 @@ export function placeOrder(orderData) {
     totalAmount: lockedTotal,
   });
 
+  syncOrder(order);
   return { order };
 }
 
@@ -181,5 +183,6 @@ export function updateOrderStatus(id, status) {
   write(all);
 
   logger.info("HP_ORDER_STATUS_UPDATED", { id, status });
+  syncOrder(all[idx]);
   return all[idx];
 }

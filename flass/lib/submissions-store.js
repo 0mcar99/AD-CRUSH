@@ -4,6 +4,7 @@ import { join } from "path";
 import { randomUUID } from "crypto";
 import { logger } from "./logger.js";
 import { getCachedJSON, queueJSONWrite } from "./io-manager.js";
+import { syncSubmission, deleteSubmission } from "./supabaseClient.js";
 
 const DATA_DIR = join(process.cwd(), "data");
 const DATA_FILE = join(DATA_DIR, "submissions.json");
@@ -121,6 +122,7 @@ export function add(submission) {
   write(all);
 
   logger.info("DATA_SUBMISSION_CREATED", { id: entry.id, name: entry.name });
+  syncSubmission(entry);
   return { entry };
 }
 
@@ -137,6 +139,7 @@ export function updateStatus(id, status) {
   write(all);
 
   logger.info("DATA_STATUS_CHANGED", { id, oldStatus, newStatus: status });
+  syncSubmission(all[idx]);
   return all[idx];
 }
 
@@ -153,6 +156,7 @@ export function updateNotes(id, notes) {
   write(all);
 
   logger.info("DATA_NOTES_UPDATED", { id });
+  syncSubmission(all[idx]);
   return all[idx];
 }
 
@@ -162,6 +166,7 @@ export function remove(id) {
   if (filtered.length === all.length) return false;
   write(filtered);
   logger.info("DATA_DELETED", { id });
+  deleteSubmission(id);
   return true;
 }
 

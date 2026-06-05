@@ -1,4 +1,4 @@
-import { findByEmail, registerUser } from "@/lib/users-store";
+import { findByEmail, registerUser, updateLastLogin } from "@/lib/users-store";
 import { verifyCredentials } from "@/lib/admin-auth";
 import { createSession } from "@/lib/session";
 import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limiter";
@@ -53,6 +53,7 @@ export async function POST(request) {
       isNewUser = true;
       logger.info("AUTH_GOOGLE_REGISTER_SUCCESS", { ip, email: redactEmail(cleanedEmail) });
     } else {
+      updateLastLogin(cleanedEmail);
       logger.info("AUTH_GOOGLE_LOGIN_SUCCESS", { ip, email: redactEmail(cleanedEmail) });
     }
 

@@ -5,6 +5,7 @@ import { randomUUID, randomInt } from "crypto";
 import bcrypt from "bcryptjs";
 import { logger } from "./logger.js";
 import { getCachedJSON, queueJSONWrite, checkNegativeCache, setNegativeCache, clearNegativeCache } from "./io-manager.js";
+import { syncProfile } from "./supabaseClient.js";
 
 const DATA_DIR = join(process.cwd(), "data");
 const USERS_FILE = join(DATA_DIR, "users.json");
@@ -114,6 +115,7 @@ export async function registerUser(email, password, phone = "", countryCode = "+
   write(all);
 
   logger.info("USER_REGISTERED", { id: user.id, email: cleaned.slice(0, 3) + "***" });
+  syncProfile(user);
 
   // Return safe user (no hash)
   const { passwordHash: _ph, ...safeUser } = user;
@@ -141,6 +143,7 @@ export async function verifyUser(email, password) {
     if (idx !== -1) {
       all[idx].lastLoginAt = new Date().toISOString();
       write(all);
+      syncProfile(all[idx]);
     }
 
     const { passwordHash: _ph, ...safeUser } = user;
@@ -175,7 +178,27 @@ export async function updatePassword(email, newPassword) {
   write(all);
 
   logger.info("PASSWORD_RESET", { email: cleaned.slice(0, 3) + "***" });
+  syncProfile(all[idx]);
   return { success: true };
+}
+
+/**
+ * Update user last login time and sync profile (for Google OAuth)
+ * @returns {object|null} safeUser
+ */
+export function updateLastLogin(email) {
+  if (!email) return null;
+  const cleaned = sanitize(email).toLowerCase();
+  const all = read();
+  const idx = all.findIndex((u) => u.email === cleaned);
+  if (idx === -1) return null;
+
+  all[idx].lastLoginAt = new Date().toISOString();
+  write(all);
+  syncProfile(all[idx]);
+
+  const { passwordHash: _ph, ...safeUser } = all[idx];
+  return safeUser;
 }
 
 /* ─── OTP Management ─── */
