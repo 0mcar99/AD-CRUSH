@@ -1,4 +1,5 @@
 import { Inter, Outfit, Playfair_Display, Space_Grotesk, JetBrains_Mono, Montserrat } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -38,6 +39,7 @@ export default function RootLayout({ children }) {
           {/* Main page content */}
           {children}
         </div>
+        <Analytics />
       </body>
     </html>
   );

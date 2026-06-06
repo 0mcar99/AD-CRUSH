@@ -1,4 +1,5 @@
 import { Inter, Outfit, Playfair_Display, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -36,6 +37,7 @@ export default function RootLayout({ children }) {
         <Navbar />
         <main style={{ minHeight: "100vh" }}>{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
