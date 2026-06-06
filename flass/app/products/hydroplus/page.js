@@ -480,7 +480,7 @@ export default function Home() {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'var(--text-muted)' }}>
                 <Truck size={16} style={{ color: 'var(--accent-orange)' }} />
-                <span>Free Express Installation</span>
+                <span>PAN-India Shipping</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'var(--text-muted)' }}>
                 <Settings size={16} style={{ color: 'var(--accent-orange)' }} />
@@ -1034,7 +1034,7 @@ export default function Home() {
         <Reveal delay={0.45}>
           <div className={styles.customNoticeCard}>
             <p className={styles.customNoticeText}>
-              ⚙️ <strong>The product is fully <span className={styles.customHighlight}>CUSTOMIZABLE</span> according to your requirement. Available for all pipe sizes! Show custom now for you. To contact us, you can follow our email ✉️ <a href="mailto:adcrush5@gmail.com" className={styles.customEmailLink}>adcrush5@gmail.com</a>.</strong>
+              💧 <strong>Buy today tomorrow you will have clean healthy water & save money 💵 on chemicals softener & extra pipes</strong>
             </p>
           </div>
         </Reveal>

@@ -115,8 +115,24 @@ export async function GET(request) {
       }
     }
 
-    // Convert map to array
-    let contacts = Array.from(contactMap.values());
+    let subscribers = [];
+    try {
+      const { getAll: getAllSubscribers } = await import("@/lib/subscribers-store");
+      subscribers = await getAllSubscribers();
+    } catch (e) {
+      logger.error("SUBSCRIBERS_IMPORT_ERROR", { error: e.message });
+    }
+    const activeSubscribers = new Set(
+      subscribers
+        .filter(s => s.active)
+        .map(s => s.email.toLowerCase().trim())
+    );
+
+    // Convert map to array and enrich with subscription status
+    let contacts = Array.from(contactMap.values()).map(c => ({
+      ...c,
+      subscribed: activeSubscribers.has((c.email || "").toLowerCase().trim())
+    }));
 
     // Apply filtering
     if (query) {
@@ -136,6 +152,55 @@ export async function GET(request) {
     return Response.json({ users: contacts }, { headers: rl.headers });
   } catch (err) {
     logger.error("API_ERROR_500", { ip, method: "GET", path: "/api/admin/users", error: err.message });
+    return Response.json({ error: "Internal server error." }, { status: 500 });
+  }
+}
+
+export async function DELETE(request) {
+  const ip = getClientIP(request);
+
+  // 1. Authorize Admin
+  const adminSession = await requireAdmin();
+  if (!adminSession) {
+    logger.warn("API_ERROR_401", { ip, method: "DELETE", path: "/api/admin/users" });
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // 2. Rate limit
+  const rl = checkRateLimit(ip, "admin");
+  if (!rl.allowed) return rateLimitResponse(rl);
+
+  try {
+    const { searchParams } = new URL(request.url);
+    const email = searchParams.get("email");
+
+    if (!email) {
+      return Response.json({ error: "Email is required" }, { status: 400, headers: rl.headers });
+    }
+
+    const cleanedEmail = email.toLowerCase().trim();
+
+    // 1. Delete from users-store
+    const { deleteUserByEmail } = await import("@/lib/users-store");
+    await deleteUserByEmail(cleanedEmail);
+
+    // 2. Delete from submissions-store
+    const { deleteSubmissionsByEmail } = await import("@/lib/submissions-store");
+    await deleteSubmissionsByEmail(cleanedEmail);
+
+    // 3. Delete from chats-store
+    const { deleteChatsByEmail } = await import("@/lib/chats-store");
+    await deleteChatsByEmail(cleanedEmail);
+
+    // 4. Delete from subscribers-store
+    const { deleteSubscriberByEmail } = await import("@/lib/subscribers-store");
+    await deleteSubscriberByEmail(cleanedEmail);
+
+    logger.info("ADMIN_DELETED_USER_DATA", { admin: adminSession.email, userEmail: cleanedEmail });
+
+    return Response.json({ success: true }, { headers: rl.headers });
+  } catch (err) {
+    logger.error("API_ERROR_500", { ip, method: "DELETE", path: "/api/admin/users", error: err.message });
     return Response.json({ error: "Internal server error." }, { status: 500 });
   }
 }

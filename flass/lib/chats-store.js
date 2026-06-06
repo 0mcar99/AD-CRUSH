@@ -164,3 +164,31 @@ export async function getChatUsers() {
     };
   });
 }
+
+export async function deleteChatsByEmail(email) {
+  if (!email) return false;
+  const cleaned = (email || "").trim().toLowerCase();
+  const all = read();
+  if (!all[cleaned]) return false;
+  
+  delete all[cleaned];
+  write(all);
+  
+  if (supabase) {
+    try {
+      const { data: vis } = await supabase
+        .from('visitors')
+        .select('id')
+        .eq('email', cleaned)
+        .limit(1);
+      const visitorId = vis && vis[0] ? vis[0].id : null;
+      if (visitorId) {
+        await supabase.from('chats').delete().eq('visitor_id', visitorId);
+        await supabase.from('visitors').delete().eq('id', visitorId);
+      }
+    } catch (err) {
+      logger.warn("SUPABASE_DELETE_CHATS_ERROR", { email: cleaned, error: err.message });
+    }
+  }
+  return true;
+}

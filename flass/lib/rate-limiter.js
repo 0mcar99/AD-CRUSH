@@ -6,12 +6,12 @@ import { logger, getClientIP, redactEmail } from "./logger.js";
  * Rate limit tiers: { maxRequests, windowMs }
  */
 const TIERS = {
-  login:      { maxRequests: 5,   windowMs: 15 * 60 * 1000 },  // 5 per 15 min
-  submission: { maxRequests: 3,   windowMs: 60 * 60 * 1000 },  // 3 per hour
-  chat:       { maxRequests: 40,  windowMs: 60 * 1000 },        // 40 per min
-  admin:      { maxRequests: 60,  windowMs: 60 * 1000 },        // 60 per min
-  general:    { maxRequests: 200, windowMs: 60 * 1000 },        // 200 per min
-  scraping:   { maxRequests: 30,  windowMs: 60 * 1000 },        // 30 per min
+  login:      { maxRequests: 150,  windowMs: 15 * 60 * 1000 },  // 150 per 15 min
+  submission: { maxRequests: 100,  windowMs: 15 * 60 * 1000 },  // 100 per 15 min
+  chat:       { maxRequests: 120,  windowMs: 60 * 1000 },        // 120 per min
+  admin:      { maxRequests: 120,  windowMs: 60 * 1000 },        // 120 per min
+  general:    { maxRequests: 500,  windowMs: 60 * 1000 },        // 500 per min
+  scraping:   { maxRequests: 30,   windowMs: 60 * 1000 },        // 30 per min
 };
 
 /** Map<string, number[]> — key is "ip:tier", value is array of timestamps */

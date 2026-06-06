@@ -125,3 +125,21 @@ export function unsubscribe(email) {
   syncSubscriber(all[idx]);
   return true;
 }
+
+export function deleteSubscriberByEmail(email) {
+  if (!email) return false;
+  const cleaned = (email || "").trim().toLowerCase();
+  const all = read();
+  const filtered = all.filter((s) => s.email !== cleaned);
+  if (filtered.length === all.length) return false;
+  write(filtered);
+  
+  if (supabase) {
+    try {
+      supabase.from('subscribers').delete().eq('email', cleaned);
+    } catch (err) {
+      logger.warn("SUPABASE_DELETE_SUBSCRIBER_ERROR", { email: cleaned, error: err.message });
+    }
+  }
+  return true;
+}

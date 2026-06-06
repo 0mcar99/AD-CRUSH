@@ -369,6 +369,27 @@ export function verifyOTP(target, code) {
   return { valid: true };
 }
 
+/**
+ * Delete a user by email
+ */
+export async function deleteUserByEmail(email) {
+  if (!email) return false;
+  const cleaned = sanitize(email).toLowerCase().trim();
+  const all = read();
+  const filtered = all.filter((u) => u.email !== cleaned);
+  if (filtered.length === all.length) return false;
+  write(filtered);
+  
+  if (supabase) {
+    try {
+      await supabase.from('profiles').delete().eq('email', cleaned);
+    } catch (err) {
+      logger.warn("SUPABASE_DELETE_USER_ERROR", { email: cleaned, error: err.message });
+    }
+  }
+  return true;
+}
+
 // Cleanup expired OTPs every 10 minutes
 if (typeof setInterval !== "undefined") {
   setInterval(() => {

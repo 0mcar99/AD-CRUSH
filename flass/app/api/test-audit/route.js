@@ -45,14 +45,14 @@ export async function GET(request) {
     const testIP = `192.168.10.${Math.floor(Math.random() * 1000)}`;
     let allowedCount = 0;
 
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 151; i++) {
       const rl = checkRateLimit(testIP, "login");
       if (rl.allowed) allowedCount++;
     }
-    assert(allowedCount === 5, `Login rate limiter capped exactly at 5 requests (got ${allowedCount})`);
+    assert(allowedCount === 150, `Login rate limiter capped exactly at 150 requests (got ${allowedCount})`);
 
     const blockedRl = checkRateLimit(testIP, "login");
-    assert(!blockedRl.allowed, "6th rapid login attempt blocked successfully");
+    assert(!blockedRl.allowed, "151st rapid login attempt blocked successfully");
     assert(blockedRl.headers["Retry-After"] !== undefined, "Blocked response returned Retry-After header");
 
     // Burst Velocity Anomaly Detection
@@ -277,11 +277,11 @@ export async function GET(request) {
     // 3. Rate limiting for order / review submissions
     const hpIP = `172.16.5.${Math.floor(Math.random() * 1000)}`;
     let hpSubmissionCount = 0;
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 101; i++) {
       const rl = checkRateLimit(hpIP, "submission");
       if (rl.allowed) hpSubmissionCount++;
     }
-    assert(hpSubmissionCount === 3, `Submission rate limiter capped exactly at 3 submissions per hour (got ${hpSubmissionCount})`);
+    assert(hpSubmissionCount === 100, `Submission rate limiter capped exactly at 100 submissions (got ${hpSubmissionCount})`);
 
     // -------------------------------------------------------------------------
     // 9. SUPABASE SYNCHRONIZATION AUDIT

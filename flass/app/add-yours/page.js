@@ -24,6 +24,23 @@ const STEPS = [
   { q: "review", type: "review", key: "_review" },
 ];
 
+const KEY_LABELS = {
+  name: "Name",
+  email: "Email",
+  adType: "Ad Type",
+  productName: "Product Name",
+  tagline: "Tagline",
+  description: "Description",
+  category: "Category",
+  audience: "Target Audience",
+  platforms: "Platforms",
+  budget: "Budget Range",
+  timeline: "Launch Timeline",
+  duration: "Campaign Duration",
+  website: "Website",
+  notes: "Special Requests/Notes"
+};
+
 function interpolate(str, data) {
   return str.replace(/\{(\w+)\}/g, (_, k) => data[k] || k);
 }
@@ -35,6 +52,7 @@ export default function AddYoursPage() {
   const [multiSel, setMultiSel] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [history, setHistory] = useState([]);
   const [formStartedAt] = useState(Date.now());
@@ -114,6 +132,7 @@ export default function AddYoursPage() {
   const submitCampaign = async (campaignData, currentUser) => {
     setSubmitting(true);
     setSubmitError("");
+    setFieldErrors({});
     pushHistory("All set! Submitting your campaign…", "✓");
 
     try {
@@ -134,6 +153,11 @@ export default function AddYoursPage() {
 
       if (!res.ok) {
         setSubmitError(result.error || "Submission failed. Please try again.");
+        if (result.fields) {
+          setFieldErrors(result.fields);
+        } else {
+          setFieldErrors({});
+        }
         setSubmitting(false);
         return;
       }
@@ -257,12 +281,22 @@ export default function AddYoursPage() {
                   <div>
                     <p style={{ marginBottom: 16 }}>Here&apos;s a summary of your campaign. Look good?</p>
                     <div className={styles.reviewGrid}>
-                      {Object.entries(data).map(([k, v]) => (
-                        <div key={k} className={styles.reviewRow}>
-                          <span className={styles.reviewKey}>{k}</span>
-                          <span className={styles.reviewVal}>{Array.isArray(v) ? v.join(", ") : v}</span>
-                        </div>
-                      ))}
+                      {Object.entries(data).map(([k, v]) => {
+                        if (k.startsWith("_")) return null;
+                        const label = KEY_LABELS[k] || k;
+                        const hasError = fieldErrors && fieldErrors[k];
+                        return (
+                          <div key={k} className={`${styles.reviewRow} ${hasError ? styles.reviewRowError : ""}`}>
+                            <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", width: "100%" }}>
+                              <span className={styles.reviewKey}>{label}</span>
+                              <span className={styles.reviewVal}>{Array.isArray(v) ? v.join(", ") : v}</span>
+                            </div>
+                            {hasError && (
+                              <span className={styles.errorText}>⚠️ {fieldErrors[k]}</span>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 ) : (

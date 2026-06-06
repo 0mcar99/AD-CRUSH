@@ -235,6 +235,26 @@ export function remove(id) {
   return true;
 }
 
+export async function deleteSubmissionsByEmail(email) {
+  if (!email) return false;
+  const cleaned = (email || "").trim().toLowerCase();
+  const all = read();
+  const toDelete = all.filter((s) => (s.email || "").toLowerCase() === cleaned);
+  const filtered = all.filter((s) => (s.email || "").toLowerCase() !== cleaned);
+  if (toDelete.length === 0) return false;
+  
+  write(filtered);
+  
+  if (supabase) {
+    try {
+      await supabase.from('campaign_submissions').delete().eq('email', cleaned);
+    } catch (err) {
+      logger.warn("SUPABASE_DELETE_SUBMISSIONS_ERROR", { email: cleaned, error: err.message });
+    }
+  }
+  return true;
+}
+
 export function getCounts() {
   const all = read();
   return {

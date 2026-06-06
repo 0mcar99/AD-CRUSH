@@ -209,6 +209,20 @@
 .reviewVal {
   color: var(--text-primary);
 }
+.reviewRowError {
+  border-bottom: 1px solid #EF4444 !important;
+  background: rgba(239, 68, 68, 0.08);
+  padding: 8px 12px !important;
+  border-radius: var(--radius-md, 8px);
+}
+.errorText {
+  color: #EF4444;
+  font-size: 11px;
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  display: block;
+  font-weight: 500;
+}
 
 /* Success */
 .successWrap {
