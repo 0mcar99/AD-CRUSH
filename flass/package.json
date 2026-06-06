@@ -8,9 +8,13 @@
     "start": "next start"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.81",
+    "@composio/core": "^0.10.0",
+    "@composio/vercel": "^0.9.2",
     "@gsap/react": "^2.1.2",
     "@supabase/supabase-js": "^2.106.2",
     "@vercel/analytics": "^2.0.1",
+    "ai": "^6.0.197",
     "bcryptjs": "^3.0.3",
     "canvas-confetti": "^1.9.4",
     "gsap": "^3.15.0",
