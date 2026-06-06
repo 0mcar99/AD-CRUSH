@@ -88,9 +88,9 @@ export default function Footer() {
               <div className={styles.contactDetail}>
                 <MapPin size={18} className={styles.contactIcon} />
                 <span>
-                  Mizusun Private Limited,<br />
-                  Pune-Nashik Highway,<br />
-                  Pune, Maharashtra 411026, India
+                  Savali Society Rd, Industrial Estate,<br />
+                  Ichalkaranji,<br />
+                  Maharashtra 416116, India
                 </span>
               </div>
               <a href="tel:9518757617" className={styles.contactDetail}>
@@ -109,7 +109,7 @@ export default function Footer() {
         {/* Bottom Legal & Socials bar */}
         <div className={styles.bottomBar}>
           <div className={styles.copyright}>
-            © {new Date().getFullYear()} Mizusun Private Limited. All rights reserved. All trademarks belong to HydroPulse™ and Mizusun.
+            Buy today tomorrow you will have clean healthy water & save money 💵 on chemicals softener & extra pipes
           </div>
           
           <div className={styles.socials}>

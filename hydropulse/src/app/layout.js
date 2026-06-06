@@ -1,4 +1,12 @@
+import { Inter, Outfit, Playfair_Display, Space_Grotesk, JetBrains_Mono, Montserrat } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
+const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
+const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains" });
+const montserrat = Montserrat({ subsets: ["latin"], variable: "--font-montserrat" });
 
 export const metadata = {
   title: "HydroPulse™ | Electronic Water Conditioner | 100% Chemical & Salt Free",
@@ -8,7 +16,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className={`${inter.variable} ${outfit.variable} ${playfair.variable} ${spaceGrotesk.variable} ${jetbrains.variable} ${montserrat.variable}`}
+    >
       <head>
         <link rel="icon" href="/favicon.png" type="image/png" />
       </head>

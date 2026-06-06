@@ -460,7 +460,7 @@ export default function Home() {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'var(--text-muted)' }}>
                 <Truck size={16} style={{ color: 'var(--accent-orange)' }} />
-                <span>Free Express Installation</span>
+                <span>PAN-India Shipping</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'var(--text-muted)' }}>
                 <Settings size={16} style={{ color: 'var(--accent-orange)' }} />
@@ -913,7 +913,7 @@ export default function Home() {
         <Reveal delay={0.4}>
           <div className={styles.customCallout}>
             <p className={styles.customCalloutText}>
-              ⚙️ The product is fully <span className={styles.customBadge}>CUSTOMIZABLE</span> according to your requirement. Available for all pipe sizes! Show custom now for you. To contact us, you can follow our email ✉️ <a href="mailto:adcrush5@gmail.com" className={styles.emailLink}>adcrush5@gmail.com</a>.
+              💧 <strong>Buy today tomorrow you will have clean healthy water & save money 💵 on chemicals softener & extra pipes</strong>
             </p>
           </div>
         </Reveal>
@@ -1170,7 +1170,7 @@ export default function Home() {
             <div style={{ textAlign: 'center', marginBottom: '16px' }}>
               <span className={styles.trustText}>🔬 Scientific Deep-Dive & Expert Review</span>
             </div>
-            <VideoEmbed videoId="cATVY7e_SrU" title="HydroPulse Scientific Technology Evaluation Video" />
+            <VideoEmbed videoId="y8s1BfVV8yo" title="HydroPulse Scientific Technology Evaluation Video" />
           </Reveal>
         </div>
 

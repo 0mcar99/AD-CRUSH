@@ -60,21 +60,21 @@
 }
 
 .logoHydro {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-montserrat-family);
   font-size: 24px;
   font-weight: 700;
   color: #FF6B00; /* Brand Orange */
 }
 
 .logoPulse {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-montserrat-family);
   font-size: 24px;
   font-weight: 700;
   color: #3E6DFF; /* Optimized Corporate Blue */
 }
 
 .logoTM {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-montserrat-family);
   color: #3E6DFF;
   margin-left: 4px;
   border: 1.2px solid #3E6DFF;
@@ -93,7 +93,7 @@
 }
 
 .logoTagline {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-montserrat-family);
   font-size: 6.8px;
   font-weight: 700;
   letter-spacing: 0.13em;
