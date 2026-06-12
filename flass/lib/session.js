@@ -3,7 +3,15 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-const secretKey = process.env.SESSION_SECRET || "fallback-adcrush-session-secret-key-32-chars-long";
+const rawSecret = process.env.SESSION_SECRET;
+if (!rawSecret) {
+  throw new Error(
+    "❌ FATAL: SESSION_SECRET environment variable is not set.\n" +
+    "Run: node -e \"console.log(require('crypto').randomBytes(32).toString('base64'))\" " +
+    "and add the output to your .env.local file."
+  );
+}
+const secretKey = rawSecret;
 const encodedKey = new TextEncoder().encode(secretKey);
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 

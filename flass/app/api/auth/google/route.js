@@ -1,14 +1,14 @@
 import { findByEmail, registerUser, updateLastLogin } from "@/lib/users-store";
-import { verifyCredentials } from "@/lib/admin-auth";
 import { createSession } from "@/lib/session";
 import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limiter";
 import { logger, getClientIP, redactEmail } from "@/lib/logger";
+import { randomBytes } from "crypto";
 
 export async function POST(request) {
   const ip = getClientIP(request);
 
-  // Rate limit check
-  const rl = checkRateLimit(ip, "google-auth");
+  // Rate limit check — uses 'login' tier (150 per 15 min)
+  const rl = checkRateLimit(ip, "login");
   if (!rl.allowed) {
     logger.warn("AUTH_RATE_LIMITED", { ip });
     return rateLimitResponse(rl);
@@ -40,8 +40,7 @@ export async function POST(request) {
     if (!user) {
       // User doesn't exist - register a new user automatically
       // Generate a secure high-entropy random password for OAuth signup
-      const crypto = require("crypto");
-      const secureRandomPassword = crypto.randomBytes(32).toString("hex") + "A1!";
+      const secureRandomPassword = randomBytes(32).toString("hex") + "A1!";
       
       const regResult = await registerUser(cleanedEmail, secureRandomPassword, "", "+91");
       if (regResult.error) {

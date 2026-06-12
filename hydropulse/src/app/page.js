@@ -474,13 +474,13 @@ export default function Home() {
         <div className={styles.videoGridStack}>
           <Reveal delay={0.35}>
             <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-              <span className={styles.trustText}>🎬 Product Showcase & Demo</span>
+              <span className={styles.trustText}>🏡 Domestic Use: Health & Home Appliances</span>
             </div>
-            <VideoEmbed videoId="xZ6UX27MUV8" title="HydroPulse Water Conditioner Introductory Guide" />
+            <VideoEmbed videoId="xZ6UX27MUV8" title="HydroPulse Domestic Water Conditioner: Health & Home Appliances" />
           </Reveal>
           <Reveal delay={0.55}>
             <div style={{ textAlign: 'center', marginBottom: '8px', marginTop: '4px' }}>
-              <span className={styles.trustText}>🔧 Installation Walkthrough & Real Case Study</span>
+              <span className={styles.trustText}>🏭 Industrial Use: Heavy-Duty Water Conditioning</span>
             </div>
             <VideoEmbed videoId="SpabsOn0G9Y" title="HydroPulse Electronic Conditioning Unit Setup" />
           </Reveal>
@@ -886,8 +886,8 @@ export default function Home() {
               id="marlin-1"
               title="Marlin 1.0"
               subtitle="Perfect limescale control for apartments and medium bungalows (1-inch pipe lines). Prevents scales and maintains healthy water."
-              mrp={55000}
-              price={50000}
+              mrp={50000}
+              price={45000}
               imageSrc="/marlin1.png"
               sizeTag="1 inch"
               onSelectProduct={handleSelectProduct}
@@ -899,8 +899,8 @@ export default function Home() {
               id="marlin-pro"
               title="Marlin Pro"
               subtitle="Reinforced signal loop for villas, penthouses, and light corporate setups (1.5-inch lines). Ideal for larger scale volumes."
-              mrp={65000}
-              price={60000}
+              mrp={60000}
+              price={55000}
               imageSrc="/marlinpro.png"
               sizeTag="1.5 inch"
               isPopular={true}
@@ -1168,7 +1168,7 @@ export default function Home() {
         <div style={{ marginTop: '80px' }}>
           <Reveal delay={0.25}>
             <div style={{ textAlign: 'center', marginBottom: '16px' }}>
-              <span className={styles.trustText}>🔬 Scientific Deep-Dive & Expert Review</span>
+              <span className={styles.trustText}>🔧 Installation Process: Quick DIY Setup Guide</span>
             </div>
             <VideoEmbed videoId="y8s1BfVV8yo" title="HydroPulse Scientific Technology Evaluation Video" />
           </Reveal>

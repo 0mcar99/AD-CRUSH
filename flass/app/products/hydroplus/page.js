@@ -494,13 +494,13 @@ export default function Home() {
         <div className={styles.videoGridStack}>
           <Reveal delay={0.35}>
             <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-              <span className={styles.trustText}>🎬 Product Showcase & Demo</span>
+              <span className={styles.trustText}>🏡 Domestic Use: Health & Home Appliances</span>
             </div>
-            <VideoEmbed videoId="xZ6UX27MUV8" title="HydroPulse Water Conditioner Introductory Guide" />
+            <VideoEmbed videoId="xZ6UX27MUV8" title="HydroPulse Domestic Water Conditioner: Health & Home Appliances" />
           </Reveal>
           <Reveal delay={0.55}>
             <div style={{ textAlign: 'center', marginBottom: '8px', marginTop: '4px' }}>
-              <span className={styles.trustText}>🔧 Installation Walkthrough & Real Case Study</span>
+              <span className={styles.trustText}>🏭 Industrial Use: Heavy-Duty Water Conditioning</span>
             </div>
             <VideoEmbed videoId="SpabsOn0G9Y" title="HydroPulse Electronic Conditioning Unit Setup" />
           </Reveal>
@@ -910,8 +910,8 @@ export default function Home() {
                 <div className={styles.productPriceBlock}>
                   <span className={styles.priceLabel}>Price</span>
                   <div className={styles.priceRow}>
-                    <span className={styles.priceVal}>{formatCurrency(50000)}</span>
-                    <span className={styles.priceMrp}>{formatCurrency(55000)}</span>
+                    <span className={styles.priceVal}>{formatCurrency(45000)}</span>
+                    <span className={styles.priceMrp}>{formatCurrency(50000)}</span>
                   </div>
                   <span style={{ fontSize: '12px', color: 'var(--accent-orange-light)', fontFamily: 'var(--font-mono)', fontWeight: 'bold', marginTop: '2px' }}>
                     Save {formatCurrency(5000)} (Limited Offer)
@@ -925,7 +925,7 @@ export default function Home() {
                   </div>
                   <button 
                     className={styles.btnAddToCart}
-                    onClick={() => handleSelectProduct({ id: 'marlin-1', title: 'Marlin 1.0', price: 50000 }, quantities['marlin-1'])}
+                    onClick={() => handleSelectProduct({ id: 'marlin-1', title: 'Marlin 1.0', price: 45000 }, quantities['marlin-1'])}
                   >
                     <ShoppingCart size={16} />
                     <span>Add to Cart</span>
@@ -957,8 +957,8 @@ export default function Home() {
                 <div className={styles.productPriceBlock}>
                   <span className={styles.priceLabel}>Price</span>
                   <div className={styles.priceRow}>
-                    <span className={styles.priceVal}>{formatCurrency(60000)}</span>
-                    <span className={styles.priceMrp}>{formatCurrency(65000)}</span>
+                    <span className={styles.priceVal}>{formatCurrency(55000)}</span>
+                    <span className={styles.priceMrp}>{formatCurrency(60000)}</span>
                   </div>
                   <span style={{ fontSize: '12px', color: 'var(--accent-orange-light)', fontFamily: 'var(--font-mono)', fontWeight: 'bold', marginTop: '2px' }}>
                     Save {formatCurrency(5000)} (Limited Offer)
@@ -972,7 +972,7 @@ export default function Home() {
                   </div>
                   <button 
                     className={styles.btnAddToCart}
-                    onClick={() => handleSelectProduct({ id: 'marlin-pro', title: 'Marlin Pro', price: 60000 }, quantities['marlin-pro'])}
+                    onClick={() => handleSelectProduct({ id: 'marlin-pro', title: 'Marlin Pro', price: 55000 }, quantities['marlin-pro'])}
                   >
                     <ShoppingCart size={16} />
                     <span>Add to Cart</span>
@@ -1001,14 +1001,9 @@ export default function Home() {
                   <span className={styles.badgeSize}>Size: 2.0+ inch</span>
                   <span className={styles.badgeStock}>In stock</span>
                 </div>
-                <div className={styles.productPriceBlock}>
-                  <span className={styles.priceLabel}>Price</span>
-                  <div className={styles.priceRow}>
-                    <span className={styles.priceVal}>{formatCurrency(79999)}</span>
-                    <span className={styles.priceMrp}>{formatCurrency(99999)}</span>
-                  </div>
-                  <span style={{ fontSize: '12px', color: 'var(--accent-orange-light)', fontFamily: 'var(--font-mono)', fontWeight: 'bold', marginTop: '2px' }}>
-                    Save {formatCurrency(20000)} (Limited Offer)
+                <div className={styles.productPriceBlock} style={{ minHeight: '64px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                  <span style={{ fontSize: '14px', color: 'var(--accent-orange)', fontWeight: 'bold', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.02em', display: 'block' }}>
+                    price depend upon customisation
                   </span>
                 </div>
                 <div className={styles.productActions}>
@@ -1334,7 +1329,7 @@ export default function Home() {
         <div style={{ marginTop: '80px' }}>
           <Reveal delay={0.25}>
             <div style={{ textAlign: 'center', marginBottom: '16px' }}>
-              <span className={styles.trustText}>🔬 Scientific Deep-Dive & Expert Review</span>
+              <span className={styles.trustText}>🔧 Installation Process: Quick DIY Setup Guide</span>
             </div>
             <VideoEmbed videoId="cATVY7e_SrU" title="HydroPulse Scientific Technology Evaluation Video" />
           </Reveal>

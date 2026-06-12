@@ -38,6 +38,11 @@ export async function PATCH(request, { params }) {
     logger.warn("API_ERROR_401", { ip, method: "PATCH", path: `/api/submissions/${(await params).id}` });
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
+  // Require admin role — not just any session
+  if (session.role !== "admin") {
+    logger.warn("API_ERROR_403", { ip, method: "PATCH", email: session.email });
+    return Response.json({ error: "Forbidden: Admin access required." }, { status: 403 });
+  }
 
   const rl = checkRateLimit(ip, "admin");
   if (!rl.allowed) return rateLimitResponse(rl);
@@ -84,6 +89,11 @@ export async function DELETE(request, { params }) {
   if (!session) {
     logger.warn("API_ERROR_401", { ip, method: "DELETE", path: `/api/submissions/${(await params).id}` });
     return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  // Require admin role — not just any session
+  if (session.role !== "admin") {
+    logger.warn("API_ERROR_403", { ip, method: "DELETE", email: session.email });
+    return Response.json({ error: "Forbidden: Admin access required." }, { status: 403 });
   }
 
   const rl = checkRateLimit(ip, "admin");

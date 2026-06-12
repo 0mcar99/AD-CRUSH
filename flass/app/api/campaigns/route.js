@@ -8,7 +8,7 @@ export async function GET(request) {
   if (!rl.allowed) return rateLimitResponse(rl);
 
   try {
-    const all = getAll();
+    const all = await getAll();
     const approved = all.filter((s) => s.status === "approved");
     return Response.json({ campaigns: approved }, { headers: rl.headers });
   } catch (err) {

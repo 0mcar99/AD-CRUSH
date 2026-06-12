@@ -203,11 +203,17 @@ export async function GET(request) {
     // 6. ADMIN PASSWORD SECURITY AUDIT
     // -------------------------------------------------------------------------
     logInfo("Auditing Administrative Login Protections...");
-    const adminSuccess = await verifyCredentials("adcrushadmin", "adminadcrushpopi15569");
-    assert(adminSuccess === true, "Static administrator username & password pair authenticated successfully");
-
-    const adminFail = await verifyCredentials("adcrushadmin", "wrongadminpassword");
-    assert(adminFail === false, "Incorrect administrative password blocked correctly");
+    // Test admin auth using environment-configured credentials only
+    const adminEmail = process.env.ADMIN_EMAIL;
+    const adminConfigured = !!(adminEmail && process.env.ADMIN_PASSWORD_HASH);
+    if (adminConfigured) {
+      const adminFail = await verifyCredentials(adminEmail, "wrongadminpassword_audit_test");
+      assert(adminFail === false, "Incorrect administrative password blocked correctly");
+      logs.push(`✅ [PASS] Admin credentials loaded from environment (ADMIN_EMAIL configured)`);
+      passedTests++;
+    } else {
+      logs.push(`⚠️ [SKIP] Admin credentials not yet configured in .env.local — set ADMIN_EMAIL and ADMIN_PASSWORD_HASH to enable admin login.`);
+    }
 
     // -------------------------------------------------------------------------
     // 7. JWT SESSION CRYPTOGRAPHIC SIGNING & SERIALIZATION AUDIT
