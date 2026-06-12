@@ -47,12 +47,9 @@ async function runTest() {
       .limit(1);
 
     if (visitorsError) {
-      console.warn("⚠️ 'visitors' table query completed with error status:", visitorsError.message);
+      console.warn("⚠️ 'visitors' table error:", visitorsError.message);
     } else {
-      console.log("✅ 'visitors' table queried successfully! Records found:", visitorsData.length);
-      if (visitorsData.length > 0) {
-        console.log("   Sample Record:", JSON.stringify(visitorsData[0]));
-      }
+      console.log("✅ 'visitors' table queried successfully!");
     }
 
     // 3. Query 'chats' table
@@ -63,12 +60,69 @@ async function runTest() {
       .limit(1);
 
     if (chatsError) {
-      console.warn("⚠️ 'chats' table query completed with error status:", chatsError.message);
+      console.warn("⚠️ 'chats' table error:", chatsError.message);
     } else {
-      console.log("✅ 'chats' table queried successfully! Records found:", chatsData.length);
-      if (chatsData.length > 0) {
-        console.log("   Sample Record:", JSON.stringify(chatsData[0]));
-      }
+      console.log("✅ 'chats' table queried successfully!");
+    }
+
+    // 4. Query 'profiles' table
+    console.log("\n3. Querying 'profiles' table...");
+    const { data: profilesData, error: profilesError } = await supabase
+      .from('profiles')
+      .select('*')
+      .limit(1);
+    if (profilesError) {
+      console.warn("⚠️ 'profiles' table error:", profilesError.message);
+    } else {
+      console.log("✅ 'profiles' table queried successfully!");
+    }
+
+    // 5. Query 'campaign_submissions' table
+    console.log("\n4. Querying 'campaign_submissions' table...");
+    const { data: submissionsData, error: submissionsError } = await supabase
+      .from('campaign_submissions')
+      .select('*')
+      .limit(1);
+    if (submissionsError) {
+      console.warn("⚠️ 'campaign_submissions' table error:", submissionsError.message);
+    } else {
+      console.log("✅ 'campaign_submissions' table queried successfully!");
+    }
+
+    // 6. Query 'subscribers' table
+    console.log("\n5. Querying 'subscribers' table...");
+    const { data: subscribersData, error: subscribersError } = await supabase
+      .from('subscribers')
+      .select('*')
+      .limit(1);
+    if (subscribersError) {
+      console.warn("⚠️ 'subscribers' table error:", subscribersError.message);
+    } else {
+      console.log("✅ 'subscribers' table queried successfully!");
+    }
+
+    // 7. Query 'hydropulse_orders' table
+    console.log("\n6. Querying 'hydropulse_orders' table...");
+    const { data: ordersData, error: ordersError } = await supabase
+      .from('hydropulse_orders')
+      .select('*')
+      .limit(1);
+    if (ordersError) {
+      console.warn("⚠️ 'hydropulse_orders' table error:", ordersError.message);
+    } else {
+      console.log("✅ 'hydropulse_orders' table queried successfully!");
+    }
+
+    // 8. Query 'hydropulse_reviews' table
+    console.log("\n7. Querying 'hydropulse_reviews' table...");
+    const { data: reviewsData, error: reviewsError } = await supabase
+      .from('hydropulse_reviews')
+      .select('*')
+      .limit(1);
+    if (reviewsError) {
+      console.warn("⚠️ 'hydropulse_reviews' table error:", reviewsError.message);
+    } else {
+      console.log("✅ 'hydropulse_reviews' table queried successfully!");
     }
 
     console.log("\n📡 Supabase connectivity test completed.");

@@ -2,12 +2,16 @@ import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-if (!supabaseUrl || !supabaseAnonKey) {
+// Server-side operations should prioritize the service_role key (which bypasses RLS)
+const activeKey = supabaseServiceKey || supabaseAnonKey;
+
+if (!supabaseUrl || !activeKey) {
   console.warn("⚠️ WARNING: Missing Supabase configurations in environment variables. Falling back to local JSON store.");
 }
 
-export const supabase = (supabaseUrl && supabaseAnonKey) ? createClient(supabaseUrl, supabaseAnonKey) : null;
+export const supabase = (supabaseUrl && activeKey) ? createClient(supabaseUrl, activeKey) : null;
 
 // ==========================================
 // GUEST LIFECYCLE SYNC HELPERS (WITH GRACEFUL FALLBACKS)
