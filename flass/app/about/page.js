@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { HelpCircle } from "lucide-react";
 import styles from "./about.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -99,6 +100,7 @@ function Reveal({ children, delay = 0 }) {
 
 /* ---- Page ---- */
 export default function AboutPage() {
+  const [openFaqIdx, setOpenFaqIdx] = useState(0);
   return (
     <>
       {/* Header */}
@@ -350,6 +352,116 @@ export default function AboutPage() {
                 </div>
               </Reveal>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className={styles.section} style={{ borderTop: "1px solid var(--border)", paddingBottom: 100 }}>
+        <div className="container">
+          <Reveal>
+            <p className="label" style={{ marginBottom: 16 }}>Information Center</p>
+            <h2 className={styles.sectionTitle}>
+              Frequently Asked <span className="text-crush">Questions.</span>
+            </h2>
+            <p className={styles.bodyText} style={{ marginBottom: 40, maxWidth: "600px" }}>
+              Clear details about our campaign publishing services, AI optimization, and how to scale your brand.
+            </p>
+          </Reveal>
+
+          <div style={{ maxWidth: "800px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "12px" }}>
+            {[
+              {
+                q: "What services does Ad Crush offer?",
+                a: "Ad Crush is a full-service ad publishing platform that handles your digital marketing campaigns end-to-end: discovery, strategic planning, high-impact creative production, AI-powered audience targeting, multi-platform launch, and real-time performance analytics."
+              },
+              {
+                q: "On which platforms does Ad Crush publish campaigns?",
+                a: "We publish and manage advertising campaigns across 50+ major platforms, including Instagram, Facebook, TikTok, YouTube, X (Twitter), LinkedIn, Google Ads, Pinterest, Snapchat, and Spotify, to maximize your brand's reach."
+              },
+              {
+                q: "How does Ad Crush optimize targeting and budget?",
+                a: "We leverage AI-powered optimization to analyze audience demographics, bidding cycles, and platform velocity in real-time. This ensures your campaigns target high-intent users at optimal times to maximize CTR and ROAS while preventing ad spend wastage."
+              },
+              {
+                q: "Who is Ad Crush designed for?",
+                a: "Ad Crush serves brands of all sizes, from tech apps and automotive manufacturers to lifestyle, fashion, food & beverage, event organizers, and industrial B2B companies looking to expand their global presence."
+              },
+              {
+                q: "How do I start my campaign with Ad Crush?",
+                a: "Simply navigate to the 'Add Yours' section of our website, fill out your brand and campaign details, and submit the form. Our creative and strategy team will review your submission and contact you within 24 hours to begin the campaign process."
+              }
+            ].map((faq, idx) => {
+              const isOpen = openFaqIdx === idx;
+              return (
+                <Reveal key={idx} delay={idx * 0.05}>
+                  <div
+                    style={{
+                      border: "1px solid var(--border)",
+                      borderRadius: "12px",
+                      background: "var(--bg-secondary)",
+                      overflow: "hidden",
+                      transition: "all 0.3s ease",
+                      boxShadow: isOpen ? "0 4px 20px rgba(0, 0, 0, 0.2)" : "none",
+                    }}
+                  >
+                    <div
+                      style={{
+                        padding: "24px",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        cursor: "pointer",
+                        gap: "16px",
+                      }}
+                      onClick={() => setOpenFaqIdx(isOpen ? -1 : idx)}
+                    >
+                      <h3
+                        style={{
+                          margin: 0,
+                          fontSize: "1.1rem",
+                          fontWeight: 600,
+                          color: isOpen ? "var(--accent-orange)" : "var(--text-primary)",
+                          transition: "color 0.2s ease",
+                          fontFamily: "var(--font-outfit)",
+                        }}
+                      >
+                        {faq.q}
+                      </h3>
+                      <HelpCircle
+                        size={20}
+                        style={{
+                          color: isOpen ? "var(--accent-orange)" : "var(--text-muted)",
+                          transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                          transition: "all 0.3s ease",
+                          flexShrink: 0,
+                        }}
+                      />
+                    </div>
+                    {isOpen && (
+                      <div
+                        style={{
+                          padding: "0 24px 24px 24px",
+                          borderTop: "1px solid rgba(255, 255, 255, 0.03)",
+                        }}
+                      >
+                        <p
+                          style={{
+                            margin: "16px 0 0 0",
+                            fontSize: "0.95rem",
+                            lineHeight: "1.6",
+                            color: "var(--text-secondary)",
+                            fontFamily: "var(--font-inter)",
+                          }}
+                        >
+                          {faq.a}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </section>
