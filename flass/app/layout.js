@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { layoutMetadata, organizationSchema, websiteSchema } from "@/lib/seo";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
@@ -14,18 +15,7 @@ export const viewport = {
   themeColor: "#0A0A0A",
 };
 
-export const metadata = {
-  title: "Ad Crush — Where Every Ad Makes an Impact",
-  description: "The global platform for publishing advertisements that captivate, convert, and crush the competition.",
-  openGraph: {
-    title: "Ad Crush — Where Every Ad Makes an Impact",
-    description: "Publish. Promote. Crush the competition.",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-  },
-};
+export const metadata = layoutMetadata;
 
 export default function RootLayout({ children }) {
   return (
@@ -34,6 +24,14 @@ export default function RootLayout({ children }) {
       className={`${inter.variable} ${outfit.variable} ${playfair.variable} ${spaceGrotesk.variable} ${jetbrains.variable}`}
     >
       <body suppressHydrationWarning>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
         <Navbar />
         <main style={{ minHeight: "100vh" }}>{children}</main>
         <Footer />

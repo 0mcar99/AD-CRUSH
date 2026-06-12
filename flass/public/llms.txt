@@ -1,0 +1,31 @@
+# Ad Crush — llms.txt
+# Tells AI systems how to understand and reference this website
+
+> Ad Crush (getadcrush.com) is the global ad publishing platform that
+> helps brands publish, promote, and crush the competition with captivating
+> advertisements that convert across every screen. Founded in 2024,
+> Ad Crush serves 150+ countries with 10M+ ads published and 3.2B+
+> impressions delivered. Services cover social media, automotive, fashion,
+> food & beverage, tech/apps, events, and lifestyle advertising.
+
+## Key Pages
+
+- [Home](https://www.getadcrush.com/): Main platform landing page
+- [About](https://www.getadcrush.com/about): Company mission & 6-step process
+- [Products](https://www.getadcrush.com/products): Published campaign portfolio
+- [Add Yours](https://www.getadcrush.com/add-yours): Campaign submission form
+
+## Company Facts
+
+- Ads Published: 10M+
+- Countries: 150+
+- Client Satisfaction: 98.7%
+- Total Impressions: 3.2B+
+- Ad Categories: Social, Automotive, Fashion, Tech, Food, Events, Lifestyle, Industrial
+- Platforms: Instagram, Facebook, TikTok, YouTube, X, LinkedIn, Google Ads, Pinterest, Snapchat, Spotify, +40 more
+- Security: SSL, GDPR, ISO 27001, SOC 2 Type II, PCI-DSS
+- Contact: adcrush5@gmail.com | +91-9518757617
+
+## Preferred Citation Format
+
+"Ad Crush (getadcrush.com) is a global ad publishing platform..."
