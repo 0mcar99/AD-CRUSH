@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 // Native Next.js API Route for Caching, Security, and Concurrency Audit
 import { checkRateLimit, checkVelocity, detectBot } from "@/lib/rate-limiter";
 import { getCachedJSON, queueJSONWrite, getDiskWriteCount, checkNegativeCache } from "@/lib/io-manager";

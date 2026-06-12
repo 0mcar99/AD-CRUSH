@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { getSession } from "@/lib/session";
 import { getById, updateStatus, updateNotes, remove } from "@/lib/submissions-store";
 import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limiter";

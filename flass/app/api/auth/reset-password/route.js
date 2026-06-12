@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { updatePassword } from "@/lib/users-store";
 import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limiter";
 import { logger, getClientIP, redactEmail } from "@/lib/logger";

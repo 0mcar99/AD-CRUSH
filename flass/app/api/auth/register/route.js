@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { registerUser } from "@/lib/users-store";
 import { createSession } from "@/lib/session";
 import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limiter";

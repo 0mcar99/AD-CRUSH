@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 /* /api/hydropulse/reviews — Secure review submittal and fetching */
 
 import { addReview, getReviews } from "@/lib/hydropulse/reviews-store";

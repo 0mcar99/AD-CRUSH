@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { getSession } from "@/lib/session";
 
 export async function GET() {

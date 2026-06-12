@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { emailExists } from "@/lib/users-store";
 import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limiter";
 import { getClientIP } from "@/lib/logger";

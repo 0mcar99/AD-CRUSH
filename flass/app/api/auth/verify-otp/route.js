@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { verifyOTP, getAllUsers } from "@/lib/users-store";
 import { createSession } from "@/lib/session";
 import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limiter";

@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 /* /api/hydropulse/orders — Secure order placement with server-side price locking */
 
 import { placeOrder } from "@/lib/hydropulse/orders-store";

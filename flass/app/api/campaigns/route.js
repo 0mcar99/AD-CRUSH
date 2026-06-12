@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { getAll } from "@/lib/submissions-store";
 import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limiter";
 import { getClientIP } from "@/lib/logger";

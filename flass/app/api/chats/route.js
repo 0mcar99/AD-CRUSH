@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { getSession } from "@/lib/session";
 import { getChats, addMessage, getChatUsers } from "@/lib/chats-store";
 import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limiter";

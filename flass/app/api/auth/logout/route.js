@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { deleteSession, getSession } from "@/lib/session";
 import { logger, getClientIP, redactEmail } from "@/lib/logger";
 

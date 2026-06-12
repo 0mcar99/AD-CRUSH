@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { verifyUser } from "@/lib/users-store";
 import { verifyCredentials } from "@/lib/admin-auth";
 import { createSession } from "@/lib/session";

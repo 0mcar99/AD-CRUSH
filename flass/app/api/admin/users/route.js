@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { requireAdmin } from "@/lib/admin-auth";
 import { getAllUsers } from "@/lib/users-store";
 import { getAll as getAllSubmissions } from "@/lib/submissions-store";
