@@ -1,0 +1,471 @@
+{
+  "timestamp": "2026-06-13T12:23:27.896Z",
+  "summary": {
+    "pass": 90,
+    "fail": 0,
+    "warn": 2,
+    "total": 92
+  },
+  "results": [
+    {
+      "status": "✅ PASS",
+      "name": "ENV: SESSION_SECRET",
+      "detail": "ozR9xyRFMZq0QZ38o5eo..."
+    },
+    {
+      "status": "✅ PASS",
+      "name": "ENV: ADMIN_EMAIL",
+      "detail": "admin@adcrush.com..."
+    },
+    {
+      "status": "✅ PASS",
+      "name": "ENV: ADMIN_PASSWORD_HASH",
+      "detail": "$2b$12$MMBDFK4KSbz2T..."
+    },
+    {
+      "status": "✅ PASS",
+      "name": "ENV: NEXT_PUBLIC_SUPABASE_URL",
+      "detail": "https://tiislxhobcht..."
+    },
+    {
+      "status": "✅ PASS",
+      "name": "ENV: NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "detail": "eyJhbGciOiJIUzI1NiIs..."
+    },
+    {
+      "status": "✅ PASS",
+      "name": "ENV: SUPABASE_SERVICE_ROLE_KEY",
+      "detail": "eyJhbGciOiJIUzI1NiIs..."
+    },
+    {
+      "status": "✅ PASS",
+      "name": "ENV: UPSTASH_REDIS_REST_URL",
+      "detail": "https://literate-gob..."
+    },
+    {
+      "status": "✅ PASS",
+      "name": "ENV: UPSTASH_REDIS_REST_TOKEN",
+      "detail": "gQAAAAAAAcLOAAIgcDJh..."
+    },
+    {
+      "status": "✅ PASS",
+      "name": ".gitignore",
+      "detail": "Contains .env*"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "SESSION_SECRET length",
+      "detail": "44 chars (≥32 OK)"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "ADMIN_PASSWORD_HASH format",
+      "detail": "Valid bcrypt hash"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "SESSION_SECRET strength",
+      "detail": "Length 44 chars — not a known weak value"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "ADMIN_EMAIL format",
+      "detail": "admin@adcrush.com"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Supabase URL uses HTTPS",
+      "detail": "https://tiislxhobchtifrmpufi.supabase.co"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Redis URL uses HTTPS",
+      "detail": "https://literate-goblin-115406.upstash.io"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "JWT algorithm",
+      "detail": "HS256 detected in session.js"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Cookie httpOnly",
+      "detail": "Set on session cookie"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Cookie SameSite",
+      "detail": "sameSite: lax set"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Cookie Secure flag",
+      "detail": "Secure in production only — OK"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Rate limiter tiers",
+      "detail": "login, submission, chat, admin, general, scraping"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Bot detection",
+      "detail": "detectBot function present"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Velocity/burst detection",
+      "detail": "checkVelocity function present"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Honeypot in /api/submissions",
+      "detail": "Anti-bot honeypot field present"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Timing validation in /api/submissions",
+      "detail": "Timing check present"
+    },
+    {
+      "status": "✅ PASS",
+      "name": ".gitignore protects .env.local",
+      "detail": ".env.local or .env* wildcard found in .gitignore"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Email validation regex",
+      "detail": "All 7 cases pass"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "URL validation regex",
+      "detail": "All 6 cases pass"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "XSS sanitization",
+      "detail": "All 5 cases pass"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Allowed adTypes count",
+      "detail": "6 types defined"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Rate limiter blocks excess",
+      "detail": "Blocked after 5 requests"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Rate limiter IP isolation",
+      "detail": "Different IP not affected by other IP limit"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Bot detection UA patterns",
+      "detail": "All 5 cases pass"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: app/api/auth/login/route.js",
+      "detail": "2068 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: app/api/auth/register/route.js",
+      "detail": "1602 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: app/api/auth/logout/route.js",
+      "detail": "675 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: app/api/auth/check/route.js",
+      "detail": "499 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: app/api/submissions/route.js",
+      "detail": "2882 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: app/api/subscribe/route.js",
+      "detail": "1784 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: app/api/chats/route.js",
+      "detail": "2909 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: lib/supabaseClient.js",
+      "detail": "7508 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: lib/session.js",
+      "detail": "2408 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: lib/rate-limiter.js",
+      "detail": "5219 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: lib/ratelimit.js",
+      "detail": "267 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: lib/users-store.js",
+      "detail": "11454 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: lib/submissions-store.js",
+      "detail": "8995 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: lib/subscribers-store.js",
+      "detail": "3855 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: lib/chats-store.js",
+      "detail": "5446 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: lib/logger.js",
+      "detail": "2596 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: lib/io-manager.js",
+      "detail": "4822 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: lib/admin-auth.js",
+      "detail": "1509 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: next.config.mjs",
+      "detail": "1566 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: package.json",
+      "detail": "589 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: .env.local",
+      "detail": "2289 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "File: .gitignore",
+      "detail": "574 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "data/ directory",
+      "detail": "Contains: hp_orders.json, hp_reviews.json, subscribers.json, users.json"
+    },
+    {
+      "status": "⚠️  WARN",
+      "name": "data/submissions.json",
+      "detail": "Does not exist (will be created on first write)"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "data/subscribers.json JSON valid",
+      "detail": "1 records"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "data/users.json JSON valid",
+      "detail": "0 records"
+    },
+    {
+      "status": "⚠️  WARN",
+      "name": "data/chats.json",
+      "detail": "Does not exist (will be created on first write)"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "next.config.mjs exists",
+      "detail": "1566 bytes"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Security header: X-Frame-Options",
+      "detail": "Configured"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Security header: CSP",
+      "detail": "Configured"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Security header: X-Content-Type-Options",
+      "detail": "Configured"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Dependency: @supabase/supabase-js",
+      "detail": "^2.106.2"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Dependency: @upstash/ratelimit",
+      "detail": "^2.0.8"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Dependency: @upstash/redis",
+      "detail": "^1.38.0"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Dependency: bcryptjs",
+      "detail": "^3.0.3"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Dependency: jose",
+      "detail": "^6.2.3"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Dependency: next",
+      "detail": "16.2.6"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Dependency: react",
+      "detail": "19.2.4"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Dependency: react-dom",
+      "detail": "19.2.4"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "node_modules/ exists",
+      "detail": "Dependencies installed"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Anon: visitors",
+      "detail": "Row count: 0"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Anon: chats",
+      "detail": "Row count: 0"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Anon: profiles",
+      "detail": "Row count: 0"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Anon: campaign_submissions",
+      "detail": "Row count: 0"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Anon: subscribers",
+      "detail": "Row count: 0"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Anon: hydropulse_orders",
+      "detail": "Row count: 0"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Anon: hydropulse_reviews",
+      "detail": "Row count: 0"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Service: visitors",
+      "detail": "Row count: 0"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Service: chats",
+      "detail": "Row count: 0"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Service: profiles",
+      "detail": "Row count: 0"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Service: campaign_submissions",
+      "detail": "Row count: 0"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Service: subscribers",
+      "detail": "Row count: 0"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Service: hydropulse_orders",
+      "detail": "Row count: 0"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Service: hydropulse_reviews",
+      "detail": "Row count: 0"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Supabase Write (upsert probe visitor)",
+      "detail": "id: 7e379856-72b3-4b73-8652-be20ed13dda9"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Supabase Delete (cleanup probe)",
+      "detail": "Probe row removed"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Redis SET",
+      "detail": "Key: flass:diagnostic:1781353405542"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Redis GET",
+      "detail": "Value matches: pong-1781353405542"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Redis DEL (cleanup)",
+      "detail": "Deleted: 1"
+    },
+    {
+      "status": "✅ PASS",
+      "name": "Redis PING",
+      "detail": "PONG ✓"
+    }
+  ]
+}
